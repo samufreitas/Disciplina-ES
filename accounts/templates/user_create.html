@@ -1,0 +1,66 @@
+<!-- user_create.html -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cadastro de usuário</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="{% static 'js/validarsenha.js' %}"></script>
+
+</head>
+<body>
+<div class="container">
+  <h1>Cadastro de Usuário:</h1>
+  <form action="" method="post" onsubmit="return validarSenha() && validarMatricula()">
+    {% csrf_token %}
+      {% include 'partials/messages.html' %}
+        {% if messages %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <div class="form-group">
+          <label for="first_name">Nome:</label>
+          <input type="text" class="form-control" id="first_name" name="first_name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="last_name">Sobrenome:</label>
+          <input type="text" class="form-control" id="last_name" name="last_name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="username">Matrícula:</label>
+          <input type="number" class="form-control" id="username" minlength="8" name="username" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="group">Grupo:</label>
+                <select class="form-control" id="group" name="groups" required>
+                    {% for group in groups %}
+                        <option value="{{ group.id }}">{{ group.name }}</option>
+                    {% endfor %}
+                </select>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Senha:</label>
+          <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+  </form>
+</div>
+
+</body>
+</html>

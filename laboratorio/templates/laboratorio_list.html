@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de laboratório</title>
+     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4">Listagem de laboratórios</h1>
+        <table class="table table-striped">
+            {% include 'partials/messages.html' %}
+            <thead>
+                <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Qunatidade monitor</th>
+                    <th scope="col">Quantidade notebook</th>
+                    <th scope="col">Quantidade teclado</th>
+                    <th scope="col">Quantidade mouse</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lab in labs %}
+                <tr>
+                    <td>{{ lab.name }}</td>
+                    <td>{{ lab.qt_monitor }}</td>
+                    <td>{{ lab.qt_notebook }}</td>
+                    <td>{{ lab.qt_teclado }}</td>
+                    <td>{{ lab.qt_teclado }}</td>
+                    <td>
+                         <form id="deleteForm" action="{% url 'laboratorio:laboratorio_delete' lab.id %}" method="post">
+                            {% csrf_token %}
+                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal">
+                                Excluir
+                            </button>
+                             <a href=" {% url 'laboratorio:laboratorio_update' lab.pk %}" class="btn btn-primary btn-sm"> Editar</a>
+                          </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        <a href=" {% url 'laboratorio:laboratorio_create'%}" class="btn btn-primary btn-sm">Adicionar laboratório</a>
+        </table>
+    </div>
+    <!-- Modal -->
+    {% include 'partials/delete_modal.html' %}
+</body>
+</html>
+
+
+
+

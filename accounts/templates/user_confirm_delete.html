@@ -1,0 +1,6 @@
+<!-- user_confirm_delete.html -->
+<p>Você tem certeza de que deseja excluir este usuário?</p>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Confirmar</button>
+</form>

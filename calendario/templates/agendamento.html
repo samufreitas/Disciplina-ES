@@ -1,0 +1,43 @@
+<!-- agendamento.html -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agendamento</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+</head>
+<body>
+    {% if error_message %}
+        <p>{{ error_message }}</p>
+    {% endif %}
+    <div class="container">
+  <h1>Agendamento</h1>
+  <form method="post">
+    {% csrf_token %}
+       {% include 'partials/messages.html' %}
+        <div class="form-group">
+          <label for="titulo">Título do compromisso:</label>
+          <input type="text" class="form-control" id="titulo" name="titulo" required>
+        </div>
+
+        <div class="form-group">
+          <label for="data">Data:</label>
+          <input type="date" class="form-control" id="data" name="data" required>
+        </div>
+        <div class="form-group">
+          <label for="hora_inicio">Horário:</label>
+          <input type="time" class="form-control" id="hora_inicio" name="hora_inicio" required>
+        </div>
+        <div class="form-group">
+          <label for="hora_fim">Horário:</label>
+          <input type="time" class="form-control" id="hora_fim" name="hora_fim" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Agendar</button>
+      </form>
+</div>
+
+</body>
+</html>
