@@ -2,8 +2,29 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponseNotAllowed
 from django.db.models import Q
 from django.contrib import messages
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+
+from .forms import AgendamentoForm
 from .models import Agendamento
 
+
+class AgendamentoCreateView(CreateView):
+    model = Agendamento
+    form_class = AgendamentoForm
+    template_name = 'agenda.html'
+    success_url = reverse_lazy('agenda')
+
+    def form_valid(self, form):
+        # Verificar se já existe um agendamento para o mesmo laboratório, data e horário
+        laboratorio = form.cleaned_data['laboratorio']
+        data = form.cleaned_data['data']
+        hora_inicio = form.cleaned_data['hora_inicio']
+        hora_fim = form.cleaned_data['hora_fim']
+        if Agendamento.objects.filter(laboratorio=laboratorio, data=data, hora_inicio=hora_inicio, hora_fim=hora_fim).exists():
+            form.add_error(None, 'Este laboratório já está agendado para esse horário.')
+            return self.form_invalid(form)
+        return super().form_valid(form)
 
 def calendario(request):
     return render(request, 'calendario.html')

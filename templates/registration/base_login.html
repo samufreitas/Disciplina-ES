@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recupera</title>
+</head>
+<body>
+
+    <header>
+        <!-- Cabeçalho comum a todas as páginas -->
+         <img src="{% static '' %}" alt="Minha imagem">
+        <h1>Recuperação de senha</h1>
+        <!-- Coloque aqui o código para o cabeçalho que deseja ter em todas as páginas -->
+    </header>
+
+    <div class="container">
+        <!-- O conteúdo específico de cada página será inserido aqui -->
+        {% block content %}
+
+        {% endblock %}
+    </div>
+
+    <footer>
+        <!-- Rodapé comum a todas as páginas -->
+        <p></p>
+        <!-- Coloque aqui o código para o rodapé que deseja ter em todas as páginas -->
+    </footer>
+
+</body>
+</html>

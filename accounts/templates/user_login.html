@@ -40,10 +40,12 @@
         <img class="mb-4" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqeLfhIOe0XgPNsxlB7owqHCw3OCyr5MQ-ebD3lQGGgt9LCJLNPhegdKJ764JoDYLX16U&usqp=CAU" alt="" width="100" height="100">
         <h1 class="h3 mb-3 font-weight-normal">Universidade Federal do Acre</h1>
         <label for="username" class="sr-only">Usuário</label>
-        <input type="text" id="username" name="username" class="form-control" placeholder="Nome de usuário" required autofocus>
+        <input type="text" id="username" name="username" class="form-control" placeholder="Digite sua matrícula" required autofocus>
         <label for="password" class="sr-only">Senha</label>
         <input type="password" id="password" name="password" class="form-control" placeholder="Digite sua senha" required>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+        <br>
+        <a  href="{% url 'password_reset' %}" class="form-control"> Esqueceu sua senha?</a>
     </form>
 
 
