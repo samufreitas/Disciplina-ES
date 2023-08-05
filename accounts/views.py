@@ -32,7 +32,7 @@ def add_user(request):
                 user.set_password(password)
                 user.save()
                 form.save_m2m()  # Salvar associação de grupos do formulário
-                messages.success(request, 'Usuário salvo com sucesso!')
+                messages.success(request, 'Usuário cadastrado com sucesso!')
                 return redirect('accounts:user_list')
     else:
         form = UserForm()
@@ -40,7 +40,7 @@ def add_user(request):
     context['form'] = form
     return render(request, template_name, context)
 def list_user(request):
-    users = User.objects.all()
+    users = User.objects.filter(is_superuser=False)
     return render(request, 'user_list.html', {'users': users})
 
 
@@ -64,6 +64,10 @@ class UserDeleteView(DeleteView):
     template_name = 'user_confirm_delete.html'
     success_url = reverse_lazy('accounts:user_list')
 
+    def delete(self, request, *args, **kwargs):
+        response = super().delete(request, *args, **kwargs)
+        messages.success(request, 'Usuário excluído com sucesso!')
+        return response
 def user_new_password(request):
     template_name = 'user_new_password.html'
     context = {}
@@ -73,8 +77,8 @@ def user_new_password(request):
             form.save()
             messages.success(request, "Senha alterada com sucesso!")
             update_session_auth_hash(request, form.user)
-            if form.user.groups.filter(name='Aluno').exists():
-                return redirect('aluno:add_plano')
+            if form.user.groups.filter(name='Secretaria').exists():
+                return redirect('secretaria:pag_secretaria')
             elif form.user.groups.filter(name='Professor').exists():
                 return redirect('accounts:add_user')
             elif form.user.groups.filter(name='Orientador').exists():
@@ -100,8 +104,8 @@ def user_login(request):
                 return redirect('accounts:user_new_password')
         if user is not None:
             login(request, user)
-            if user.groups.filter(name='Aluno').exists():
-                return redirect('aluno:add_plano')
+            if user.groups.filter(name='Secretaria').exists():
+                return redirect('secretaria:pag_secretaria')
             elif user.groups.filter(name='Professor').exists():
                 return redirect('accounts:add_user')
             elif user.groups.filter(name='Orientador').exists():

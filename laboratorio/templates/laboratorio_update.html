@@ -1,46 +1,38 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Atualizar laboratorio</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
-
-</head>
-<body>
-    {% if error_message %}
-        <p>{{ error_message }}</p>
-    {% endif %}
+{% extends 'secretaria/base_secretaria.html' %}
+{% block container %}
     <div class="container">
-  <h1>Atualizar laboratorio:</h1>
-  <form action="." method="post">
-    {% csrf_token %}
-      {% include 'partials/messages.html' %}
-      <div class="form-group">
-        <label for="id_qt_monitor">Quantidade de monitor:</label>
-        <input type="number" class="form-control" name="qt_monitor" value="{{ form.instance.qt_monitor }}" maxlength="150" required id="id_qt_monitor" autofocus>
-      </div>
+      <h1>Atualizar laboratorio:</h1>
+      <form action="." method="post">
+          {% csrf_token %}
+          {% include 'partials/messages.html' %}
+          <div class="form-group">
+            <label for="id_qt_monitor">Quantidade de monitor:</label>
+            <input type="number" class="form-control" name="qt_monitor" value="{{ form.instance.qt_monitor }}" maxlength="150" required id="id_qt_monitor" autofocus>
+          </div>
 
-      <div class="form-group">
-        <label for="id_qt_notebook">Quantidade de notebook:</label>
-        <input type="number" class="form-control" name="qt_notebook" value="{{ form.instance.qt_notebook }}" maxlength="150" required id="id_qt_notebook">
-      </div>
+          <div class="form-group">
+            <label for="id_qt_notebook">Quantidade de notebook:</label>
+            <input type="number" class="form-control" name="qt_notebook" value="{{ form.instance.qt_notebook }}" maxlength="150" required id="id_qt_notebook">
+          </div>
 
-      <div class="form-group">
-        <label for="id_qt_teclado">Quantidade de teclado:</label>
-        <input type="number" class="form-control" name="qt_teclado" value="{{ form.instance.qt_teclado }}" maxlength="254" id="id_qt_teclado">
-      </div>
+          <div class="form-group">
+            <label for="id_qt_teclado">Quantidade de teclado:</label>
+            <input type="number" class="form-control" name="qt_teclado" value="{{ form.instance.qt_teclado }}" maxlength="254" id="id_qt_teclado">
+          </div>
 
-      <div class="form-group">
-        <label for="id_qt_mouse">Quantidade de teclado:</label>
-        <input type="number" class="form-control" name="qt_mouse" value="{{ form.instance.qt_mouse }}" maxlength="254" id="id_qt_mouse">
-      </div>
+          <div class="form-group">
+            <label for="id_qt_mouse">Quantidade de teclado:</label>
+            <input type="number" class="form-control" name="qt_mouse" value="{{ form.instance.qt_mouse }}" maxlength="254" id="id_qt_mouse">
+          </div>
+           <div class="container">
+            <button type="submit" class="btn btn-success float-right">Cadastrar</button>
+            <a href="{% url 'laboratorio:laboratorio_list' %}" class="btn btn-primary  float-left">Voltar</a>
+        </div>
+      </form>
+    </div>
+{% endblock %}
 
-      <button type="submit" class="btn btn-primary">Salvar</button>
 
-  </form>
-</div>
 
-</body>
-</html>
+
 

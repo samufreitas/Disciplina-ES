@@ -1,48 +1,43 @@
-<!-- agendamento.html -->
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-   <title>Cadastro de laboratório</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="{% static 'js/validarsenha.js' %}"></script>
+{% extends 'secretaria/base_secretaria.html' %}
+{% block container %}
+    <div class="container">
+      <h1>Cadastro de Laboratório:</h1>
+      <form method="post" action=".">
+        {% csrf_token %}
+          {% include 'partials/messages.html' %}
 
-</head>
-<body>
-<div class="container">
-  <h1>Cadastro de Laboratório:</h1>
-  <form method="post" action=".">
-    {% csrf_token %}
-      {% include 'partials/messages.html' %}
+            <div class="form-group">
+              <label for="id_name">Nome do Laboratório:</label>
+              <input type="text" class="form-control" id="id_name" name="name" autofocus required>
+            </div>
+            <div class="form-group">
+              <label for="id_qt_monitor">Quantidade monitor:</label>
+              <input type="number" class="form-control" id="id_qt_monitor" name="qt_monitor" required>
+            </div>
+            <div class="form-group">
+              <label for="id_qt_notebook">Quantidade notebook:</label>
+              <input type="number" class="form-control" id="id_qt_notebook"  name="qt_notebook" required>
+            </div>
+            <div class="form-group">
+              <label for="id_qt_teclado">Quantidade de teclado(s):</label>
+              <input type="number" class="form-control" id="id_qt_teclado" name="qt_teclado" required>
+            </div>
 
-        <div class="form-group">
-          <label for="id_name">Nome do Laboratório:</label>
-          <input type="text" class="form-control" id="id_name" name="name" autofocus required>
-        </div>
-        <div class="form-group">
-          <label for="id_qt_monitor">Quantidade monitor:</label>
-          <input type="number" class="form-control" id="id_qt_monitor" name="qt_monitor" required>
-        </div>
-        <div class="form-group">
-          <label for="id_qt_notebook">Quantidade notebook:</label>
-          <input type="number" class="form-control" id="id_qt_notebook"  name="qt_notebook" required>
-        </div>
-        <div class="form-group">
-          <label for="id_qt_teclado">Quantidade de teclado(s):</label>
-          <input type="number" class="form-control" id="id_qt_teclado" name="qt_teclado" required>
-        </div>
+            <div class="form-group">
+              <label for="id_qt_mouse">Quantidade de mouse:</label>
+              <input type="number" class="form-control" id="id_qt_mouse" name="qt_mouse" required>
+            </div>
+            <div class="container">
+                <button type="submit" class="btn btn-success float-right">Cadastrar</button>
+                <a href="{% url 'laboratorio:laboratorio_list' %}" class="btn btn-primary  float-left">Voltar</a>
+            </div>
+          </form>
+    </div>
+{% endblock %}
 
-        <div class="form-group">
-          <label for="id_qt_mouse">Quantidade de mouse:</label>
-          <input type="number" class="form-control" id="id_qt_mouse" name="qt_mouse" required>
-        </div>
 
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
-      </form>
-</div>
 
-</body>
-</html>
+
 
 
 

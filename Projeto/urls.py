@@ -21,13 +21,12 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('calendario.urls')),
+    path('calendario/', include('calendario.urls')),
     path('contas/', include('accounts.urls', namespace='accounts')),
     path('laboratorio/', include('laboratorio.urls', namespace='laboratorio')),
+    path("", include("secretaria.urls", namespace='secretaria')),
 
 ]
 urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
 ]
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) # Adicionar Isto
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # Adicionar Isto

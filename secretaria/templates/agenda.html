@@ -1,0 +1,65 @@
+{% extends 'secretaria/base_secretaria.html' %}
+
+{% block container %}
+    <div class="container">
+        <h5>Fazer agendamento:</h5>
+        <form method="post">
+        {% csrf_token %}
+        {% include 'partials/messages.html' %}
+        <div class="form-group">
+          <label for="id_titulo">Título do agendamento:</label>
+          <input type="text" class="form-control" id="id_titulo" name="titulo" required autofocus>
+        </div>
+       <div class="row">
+           <div class="col">
+                <label for="id_data">Data:</label>
+                <input type="date" class="form-control"  id="id_data" name="data" required>
+            </div>
+            <div class="col">
+                <label for="id_hora_inicio">Horário inicio:</label>
+                <input type="time" class="form-control"  id="id_hora_inicio" name="hora_inicio" required>
+            </div>
+            <div class="col">
+                <label for="id_hora_fim">Horário fim:</label>
+                <input type="time" class="form-control"  id="id_hora_fim" name="hora_fim" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="id_laboratorio">Laboratório:</label>
+                <select class="form-control" id="id_laboratorio" name="laboratorio" required>
+                     <option value="" disabled selected>Escolher laboratório</option>
+                     {% for lab in labs %}
+                        <option value="{{ lab.id }}">{{ lab.name }}</option>
+                     {% endfor %}
+                </select>
+        </div>
+        <div class="form-group">
+            <label for="id_tipo">Tipo:</label>
+                <select class="form-control" id="id_tipo" name="tipo" required>
+                       <option value="" disabled selected>Escolher tipo de agendamento</option>
+                      {% for choice_value, choice_label in tipos %}
+                        <option value="{{ choice_value }}">{{ choice_label }}</option>
+                      {% endfor %}
+                </select>
+        </div>
+        <div class="form-group">
+            <label for="id_user">Usuários:</label>
+            <select class="form-control" id="id_user" name="user" >
+                <option value="" disabled selected>Escolha um usuário</option>
+                {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.get_full_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+          <label for="id_opicional">Opicional:</label>
+          <textarea class="form-control" id="id_opicional" rows="3" name="opicional"></textarea>
+        </div>
+        <div class="container">
+            <button type="submit" class="btn btn-success  float-right">Agendar</button>
+            <a href="{% url 'secretaria:lista' %}" class="btn btn-primary  float-left">Voltar</a>
+        </div>
+      </form>
+    </div>
+{% endblock %}

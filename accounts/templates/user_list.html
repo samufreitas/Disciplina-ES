@@ -1,13 +1,5 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Listagem de usuários</title>
-     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-</head>
-<body>
+{% extends 'secretaria/base_secretaria.html' %}
+{% block container %}
     <div class="container">
         <h1 class="mt-4">Listagem de Usuários</h1>
         <table class="table table-striped">
@@ -47,12 +39,15 @@
                 </tr>
                 {% endfor %}
             </tbody>
-        <a href=" {% url 'accounts:user_create'%}" class="btn btn-primary btn-sm">Adicionar novo usuário</a>
+            <div class="text-right">
+                <a href=" {% url 'accounts:user_create'%}" class="btn btn-success btn-sm">Adicionar novo usuário</a>
+            </div>
         </table>
+        <div class="text-left">
+            <a href="{% url 'secretaria:pag_secretaria' %}" class="btn btn-primary btn-sm">Voltar</a>
+        </div>
     </div>
     <!-- Modal -->
     {% include 'partials/delete_modal.html' %}
-</body>
-</html>
-
+{% endblock %}
 

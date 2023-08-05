@@ -1,0 +1,47 @@
+.side-bar{
+    margin-top: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    font-size: 45px;
+    background: #DCDCDC;
+    height:100vh;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.side{
+    display: flex;
+    justify-content:left;
+    background: #DCDCDC;
+    height: 100vh;
+    margin-top: 1rem;
+    border-radius: 10px;
+}
+
+#titulo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-right: 50rem;
+
+}
+#logo{
+    margin-left: 5rem;
+}
+body{
+   
+    background: white;
+}
+#navebar{
+    display: flex;
+    background: #DCDCDC;
+    border-radius: 10px;
+    
+}
+#btn{
+    margin-top: 30rem;
+}

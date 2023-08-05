@@ -1,16 +1,9 @@
-<!-- user_create.html -->
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Cadastro de usuário</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="{% static 'js/validarsenha.js' %}"></script>
 
-</head>
-<body>
+
+{% extends 'secretaria/base_secretaria.html' %}
+{% block container %}
 <div class="container">
-  <h1>Cadastro de Usuário:</h1>
+  <h5>Cadastro de usuários:</h5>
   <form action="" method="post" onsubmit="return validarSenha() && validarMatricula()">
     {% csrf_token %}
       {% include 'partials/messages.html' %}
@@ -35,7 +28,7 @@
         </div>
 
         <div class="form-group">
-          <label for="username">Matrícula:</label>
+          <label for="username">Matrícula ou SIAPE:</label>
           <input type="number" class="form-control" id="username" minlength="8" name="username" required>
         </div>
 
@@ -57,10 +50,10 @@
           <label for="password">Senha:</label>
           <input type="password" class="form-control" id="password" name="password" required>
         </div>
-
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
+        <div class="container">
+                <button type="submit" class="btn btn-success float-right">Cadastrar</button>
+                <a href="{% url 'accounts:user_list' %}" class="btn btn-primary  float-left">Voltar</a>
+        </div>
   </form>
 </div>
-
-</body>
-</html>
+{% endblock %}

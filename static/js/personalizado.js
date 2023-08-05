@@ -18,8 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
             info.jsEvent.preventDefault(); // don't let the browser navigate
 
             $('#visualizar #id').text(info.event.id);
-            $('#visualizar #title').text(info.event.title);
-            $('#visualizar #start').text(info.event.start.toLocaleString());
+            $('#visualizar #title').text(info.event.title),
             $('#visualizar').modal('show');
 
 

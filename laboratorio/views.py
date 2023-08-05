@@ -19,6 +19,7 @@ class LaboratorioCreateView(CreateView):
         if Laboratorio.objects.filter(name=form.cleaned_data['name']).exists():
             messages.error(self.request, "Já exixte um laboratório com esse nome!")
             return self.form_invalid(form)
+        messages.success(self.request, "Laboratório cadastrado com sucesso!")
         return super().form_valid(form)
 
 class LaboratorioUpdateView(UpdateView):
@@ -26,6 +27,10 @@ class LaboratorioUpdateView(UpdateView):
     template_name = 'laboratorio_update.html'
     fields = ['qt_monitor', 'qt_notebook', 'qt_teclado', 'qt_mouse']
     success_url = reverse_lazy('laboratorio:laboratorio_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, "Atualização realizada com sucesso!")
+        return super().form_valid(form)
 
 
     def get_form_kwargs(self):
