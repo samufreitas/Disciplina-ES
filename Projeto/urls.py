@@ -24,7 +24,8 @@ urlpatterns = [
     path('calendario/', include('calendario.urls')),
     path('contas/', include('accounts.urls', namespace='accounts')),
     path('laboratorio/', include('laboratorio.urls', namespace='laboratorio')),
-    path("", include("secretaria.urls", namespace='secretaria')),
+    path("secretaria/", include("secretaria.urls", namespace='secretaria')),
+    path("", include("monitor.urls", namespace='monitor')),
 
 ]
 urlpatterns += [

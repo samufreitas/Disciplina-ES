@@ -79,8 +79,8 @@ def user_new_password(request):
             update_session_auth_hash(request, form.user)
             if form.user.groups.filter(name='Secretaria').exists():
                 return redirect('secretaria:pag_secretaria')
-            elif form.user.groups.filter(name='Professor').exists():
-                return redirect('accounts:add_user')
+            elif form.user.groups.filter(name='Monitor').exists():
+                return redirect('monitor:pag_monitor')
             elif form.user.groups.filter(name='Orientador').exists():
                 return redirect('aluno:list_plano')
         else:
@@ -106,8 +106,8 @@ def user_login(request):
             login(request, user)
             if user.groups.filter(name='Secretaria').exists():
                 return redirect('secretaria:pag_secretaria')
-            elif user.groups.filter(name='Professor').exists():
-                return redirect('accounts:add_user')
+            elif user.groups.filter(name='Monitor').exists():
+                return redirect('monitor:pag_monitor')
             elif user.groups.filter(name='Orientador').exists():
                 return redirect('aluno:list_plano')
         else:

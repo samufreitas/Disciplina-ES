@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'ckeditor',
     'secretaria',
     'crispy_forms',
-    'crispy_bootstrap4'
+    'crispy_bootstrap4',
+    'monitor',
 
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"

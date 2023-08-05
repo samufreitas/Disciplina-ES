@@ -4,20 +4,20 @@ from django.db.models import Q
 from django.contrib import messages
 from datetime import datetime
 from django.db import transaction
-from .forms import AgendamentoForm
-from .models import Agendamento
+from .forms import AgendamentoMonitorForm
+from secretaria.models import Agendamento
 from laboratorio.models import Laboratorio
 from django.contrib.auth.models import User
 
 
 
 
-def pag_secretaria(request):
-    return render(request, 'secretaria/base_secretaria.html')
+def pag_monitor(request):
+    return render(request, 'monitor/base_monitor.html')
 
 
-def adicionar_evento(request):
-    template_name = 'agenda.html'
+def agendar_monitor(request):
+    template_name = 'monitor/agendar_monitor.html'
     context = {}
 
     tipos = Agendamento.TIPO_CHOICES
@@ -26,11 +26,9 @@ def adicionar_evento(request):
     labs = Laboratorio.objects.all()
     context['labs'] = labs
 
-    users = User.objects.all()
-    context['users'] = users
     eventos_a_agendar = []
     if request.method == 'POST':
-        form = AgendamentoForm(request.POST)
+        form = AgendamentoMonitorForm(request.POST)
         if form.is_valid():
             f = form.save(commit=False)
 
@@ -60,17 +58,17 @@ def adicionar_evento(request):
                         else:
                             # Se for outra monitoria ou não houver conflito, salva o novo agendamento
                             f.user = request.user
-                            f.status = 'Agendado'
+                            f.status = 'Solicitado'
                             f.save()
                             messages.success(request, 'Agendamento realizado com sucesso!')
-                            return redirect('secretaria:lista')
+                            return redirect('monitor:lista_monitor')
                     else:
                         # Se não houver conflitos, salva o novo agendamento
                         eventos_a_agendar = [f]
         else:
             messages.error(request, 'Todos os campos devem ser preenchidos corretamente.')
     else:
-        form = AgendamentoForm()
+        form = AgendamentoMonitorForm()
 
     context['form'] = form
     if request.method == 'POST':
@@ -81,14 +79,14 @@ def adicionar_evento(request):
                 evento.save()
 
         messages.success(request, 'Agendamentos realizados com sucesso!')
-        return redirect('secretaria:lista')
+        return redirect('monitor:lista_monitor')
 
     return render(request, template_name, context)
 
 
-def listar_agendamentos(request):
-    agendamentos = Agendamento.objects.all()
-    return render(request, 'listagem_agendamentos.html', {'agendamentos': agendamentos})
+def listar_monitor(request):
+    agendamentos = Agendamento.objects.filter(status='Solicitado')
+    return render(request, 'monitor/lista_agendamento_monitor.html', {'agendamentos': agendamentos})
 
 
 def excluir_agendamento(request, agendamento_id):
@@ -99,20 +97,9 @@ def excluir_agendamento(request, agendamento_id):
     except Agendamento.DoesNotExist:
         messages.error(request, "Agendamento não encontrado.")
 
-    return redirect('secretaria:lista')
+    return redirect('monitor:lista_monitor')
 
 
 
-def eventos(request):
-    eventos = Agendamento.objects.all()
-    data = []
-    for evento in eventos:
-        print(evento.id)
-        print(evento.titulo)
-        data.append({
-            'id': evento.id,
-            'title': evento.titulo,
-        })
-    return JsonResponse(data, safe=False)
 
 
