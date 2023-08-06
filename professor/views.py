@@ -10,12 +10,12 @@ from laboratorio.models import Laboratorio
 
 
 
-def pag_monitor(request):
-    return render(request, 'monitor/base_monitor.html')
+def pag_professor(request):
+    return render(request, 'professor/base_professor.html')
 
 
-def agendar_monitor(request):
-    template_name = 'monitor/agendar_monitor.html'
+def agendar_professor(request):
+    template_name = 'professor/agendar_professor.html'
     context = {}
 
     labs = Laboratorio.objects.all()
@@ -53,11 +53,11 @@ def agendar_monitor(request):
                         else:
                             # Se for outra monitoria ou não houver conflito, salva o novo agendamento
                             f.user = request.user
-                            f.status = 'Solicitado'
-                            f.tipo = 'Monitoria'
+                            f.status = 'Agendado'
+                            f.tipo = 'Aula'
                             f.save()
-                            messages.success(request, 'Solicitação de agendamento realizado com sucesso!')
-                            return redirect('monitor:lista_monitor')
+                            messages.success(request, 'Agendamento realizado com sucesso!')
+                            return redirect('professor:listar_professor')
                     else:
                         # Se não houver conflitos, salva o novo agendamento
                         eventos_a_agendar = [f]
@@ -71,19 +71,19 @@ def agendar_monitor(request):
         with transaction.atomic():
             for evento in eventos_a_agendar:
                 evento.user = request.user
-                evento.status = 'Solicitado'
-                evento.tipo = 'Monitoria'
+                evento.status = 'Agendado'
+                evento.tipo = 'Aula'
                 evento.save()
 
-        messages.success(request, 'Solicitação de agendamento realizado com sucesso!')
-        return redirect('monitor:lista_monitor')
+        messages.success(request, 'Agendamentos realizados com sucesso!')
+        return redirect('professor:listar_professor')
 
     return render(request, template_name, context)
 
 
-def listar_monitor(request):
-    agendamentos = Agendamento.objects.filter(status='Solicitado')
-    return render(request, 'monitor/lista_agendamento_monitor.html', {'agendamentos': agendamentos})
+def listar_professor(request):
+    agendamentos = Agendamento.objects.filter(status='Agendado')
+    return render(request, 'professor/lista_agendamento_professor.html', {'agendamentos': agendamentos})
 
 
 def excluir_agendamento(request, agendamento_id):
@@ -94,7 +94,7 @@ def excluir_agendamento(request, agendamento_id):
     except Agendamento.DoesNotExist:
         messages.error(request, "Agendamento não encontrado.")
 
-    return redirect('monitor:lista_monitor')
+    return redirect('professor:listar_professor')
 
 
 
