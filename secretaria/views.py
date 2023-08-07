@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponseNotAllowed
+from django.http import JsonResponse
+from django.core.mail import send_mail
 from django.db.models import Q
 from django.contrib import messages
 from datetime import datetime
@@ -8,6 +9,7 @@ from .forms import AgendamentoForm
 from .models import Agendamento
 from laboratorio.models import Laboratorio
 from django.contrib.auth.models import User
+from decouple import config
 
 
 
@@ -87,9 +89,36 @@ def adicionar_evento(request):
 
 
 def listar_agendamentos(request):
-    agendamentos = Agendamento.objects.all()
+    agendamentos = Agendamento.objects.filter(status='Agendado')
     return render(request, 'listagem_agendamentos.html', {'agendamentos': agendamentos})
 
+
+def listar_solicitacao(request):
+    agendamentos = Agendamento.objects.filter(tipo='Monitoria', status='Solicitado')
+    return render(request, 'solicitacao.html', {'agendamentos': agendamentos})
+
+def conf_solicitacao(request, agendamento_id):
+    agendamento = Agendamento.objects.get(id=agendamento_id)
+    agendamento.status = 'Agendado'
+    agendamento.save()  # Salva a atualização no banco de dado
+
+    # Formata a data para o formato "D/M/A"
+    data = agendamento.data.strftime('%d/%m/%Y')
+
+    # Formata as horas de início e fim para o formato "HH:mm"
+    hora_inicio = agendamento.hora_inicio.strftime('%H:%M')
+    hora_fim = agendamento.hora_fim.strftime('%H:%M')
+
+    # Envia um e-mail para o usuário que fez a solicitação
+    assunto = 'Coordenação Sistemas de Informação: Agendamento Confirmado'
+    mensagem = f'Sua solicitação de agendamento para dia {data} ' \
+               f'com início às {hora_inicio} e termino as {hora_fim} foi aceita!'
+    remetente = config('EMAIL_HOST_USER')
+    destinatario = agendamento.user.email  # Supondo que o campo de e-mail do usuário seja "email"
+    send_mail(assunto, mensagem, remetente, [destinatario])
+
+    messages.success(request, "Solicitação confirmada!")
+    return redirect('secretaria:listar_solicitacao')
 
 def excluir_agendamento(request, agendamento_id):
     try:

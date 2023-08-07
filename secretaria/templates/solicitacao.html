@@ -1,0 +1,44 @@
+{% extends 'secretaria/base_secretaria.html' %}
+{% block container %}
+    <div class="container">
+    <h5>Listagem de solicitações:</h5>
+    <table class="table table-striped4">
+        <thead>
+            <tr>
+                <th scope="col">Título</th>
+                <th scope="col">Data</th>
+                <th scope="col">Hora de Início</th>
+                <th scope="col">Hora de Término</th>
+                <th scope="col">Laboratório</th>
+                <th scope="col">Monitor</th>
+                <th scope="col">Status</th>
+                <th scope="col">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for agendamento in agendamentos %}
+            <tr>
+                <td>{{ agendamento.titulo }}</td>
+                <td>{{ agendamento.data|date:"d/m/Y" }}</td>
+                <td>{{ agendamento.hora_inicio }}</td>
+                <td>{{ agendamento.hora_fim }}</td>
+                 <td>{{ agendamento.laboratorio }}</td>
+                 <td>{{ agendamento.user.get_full_name }}</td>
+                 <td>{{ agendamento.status }}</td>
+                <td>
+                    <form id="deleteForm" action="{% url 'secretaria:conf_solicitacao' agendamento.id %}" method="post">
+                            {% csrf_token %}
+                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#confirmDeleteModal">
+                                Agendar
+                            </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+      <div class="text-left">
+         <a href="{% url 'secretaria:pag_secretaria' %}" class="btn btn-primary btn-sm">Voltar</a>
+      </div>
+    </div>
+{% endblock %}

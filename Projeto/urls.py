@@ -24,9 +24,9 @@ urlpatterns = [
     path('calendario/', include('calendario.urls')),
     path('contas/', include('accounts.urls', namespace='accounts')),
     path('laboratorio/', include('laboratorio.urls', namespace='laboratorio')),
-    path("secretaria/", include("secretaria.urls", namespace='secretaria')),
+    path("", include("secretaria.urls", namespace='secretaria')),
     path("monitor/", include("monitor.urls", namespace='monitor')),
-    path("", include("professor.urls", namespace='professor')),
+    path("professor/", include("professor.urls", namespace='professor')),
 ]
 urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
