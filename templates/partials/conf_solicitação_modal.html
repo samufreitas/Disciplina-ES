@@ -1,0 +1,29 @@
+<!-- partials/Solicita_modal.html -->
+<div class="modal fade" id="confirmSolicitaModal" tabindex="-1" role="dialog" aria-labelledby="confirmSolicitaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmSolicitaModalLabel">Confirmação agendamento de solicitação</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja agendar essa solicitação?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="confirmSolicitaBtn">Agendar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var confirmSolicitaBtn = document.getElementById("confirmSolicitaBtn");
+        confirmSolicitaBtn.addEventListener("click", function () {
+            var SolicitaForm = document.getElementById("SolicitaForm");
+            SolicitaForm.submit();
+        });
+    });
+</script>

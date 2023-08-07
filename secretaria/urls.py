@@ -11,5 +11,6 @@ urlpatterns = [
     path('listar_solicitacao/', views.listar_solicitacao, name='listar_solicitacao'),
     path('conf_solicitacao/<int:agendamento_id>/update/', views.conf_solicitacao, name='conf_solicitacao'),
     path('agendamentos/<int:agendamento_id>/delete/', views.excluir_agendamento, name='excluir_agendamento'),
+    path('nega_solicitacao/<int:agendamento_id>/delete/', views.negar_solicitacao, name='negar_solicitacao'),
 
 ]

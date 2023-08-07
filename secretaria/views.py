@@ -117,7 +117,29 @@ def conf_solicitacao(request, agendamento_id):
     destinatario = agendamento.user.email  # Supondo que o campo de e-mail do usuário seja "email"
     send_mail(assunto, mensagem, remetente, [destinatario])
 
-    messages.success(request, "Solicitação confirmada!")
+    messages.warning(request, "Solicitação confirmada!")
+    return redirect('secretaria:listar_solicitacao')
+
+def negar_solicitacao(request, agendamento_id):
+    try:
+        agendamento = Agendamento.objects.get(id=agendamento_id)
+        data = agendamento.data.strftime('%d/%m/%Y')
+
+        # Formata as horas de início e fim para o formato "HH:mm"
+        hora_inicio = agendamento.hora_inicio.strftime('%H:%M')
+        hora_fim = agendamento.hora_fim.strftime('%H:%M')
+        agendamento.delete()
+        assunto = 'Coordenação Sistemas de Informação: Agendamento negado'
+        mensagem = f'Sua solicitação de agendamento para dia {data} ' \
+                   f'com início às {hora_inicio} e termino as {hora_fim} foi negada!'
+        remetente = config('EMAIL_HOST_USER')
+        destinatario = agendamento.user.email  # Supondo que o campo de e-mail do usuário seja "email"
+        send_mail(assunto, mensagem, remetente, [destinatario])
+        messages.warning(request, "Solicitação de agendamento negada!")
+
+    except Agendamento.DoesNotExist:
+        messages.error(request, "Solicitação não encontrado.")
+
     return redirect('secretaria:listar_solicitacao')
 
 def excluir_agendamento(request, agendamento_id):

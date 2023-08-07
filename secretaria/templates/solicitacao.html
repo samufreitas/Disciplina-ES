@@ -26,12 +26,22 @@
                  <td>{{ agendamento.user.get_full_name }}</td>
                  <td>{{ agendamento.status }}</td>
                 <td>
-                    <form id="deleteForm" action="{% url 'secretaria:conf_solicitacao' agendamento.id %}" method="post">
+                    <div class="d-inline-block">
+                        <form id="SolicitaForm" action="{% url 'secretaria:conf_solicitacao' agendamento.id %}" method="post">
                             {% csrf_token %}
-                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#confirmDeleteModal">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#confirmSolicitaModal">
                                 Agendar
                             </button>
-                    </form>
+                        </form>
+                    </div>
+                    <div class="d-inline-block ml-2">
+                        <form id="NegarForm" action="{% url 'secretaria:negar_solicitacao' agendamento.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmNegarModal">
+                                Negar
+                            </button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             {% endfor %}
