@@ -1,0 +1,19 @@
+{% extends 'secretaria/base_secretaria.html' %}
+{% load widget_tweaks %}
+{% block container %}
+<div class="container-fluid">
+    <h5>Cadastrar no tipo:</h5>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+                <label for="{{ form.titulo.id_for_label }}">Nome do tipo:</label>
+                {{form.titulo|add_class:"form-control"|attr:"autofocus" }}
+                <span style="color: red">{{ form.titulo.errors }}</span>
+            </div>
+        <div class="container">
+            <button type="submit" class="btn btn-success float-right">Agendar</button>
+            <a href="{% url 'secretaria:add_tipo' %}" class="btn btn-primary float-left">Voltar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -26,12 +26,23 @@
                  <td>{{ agendamento.tipo }}</td>
                  <td>{{ agendamento.status }}</td>
                 <td>
-                    <form id="deleteForm" action="{% url 'secretaria:excluir_agendamento' agendamento.id %}" method="post">
+                     <div class="d-inline-block ">
+                        <form id="CancelarForm{{ agendamento.id }}" action="{% url 'secretaria:cancelar_agendamento' agendamento.id %}" method="post">
                             {% csrf_token %}
-                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal">
-                                Excluir
+                            <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" onclick="CancelarModal({{ agendamento.id }})">
+                                Cancelar
                             </button>
                     </form>
+                    </div>
+                    <div class="d-inline-block">
+                        <form id="DeleteForm{{ agendamento.id }}" action="{% url 'secretaria:excluir_agendamento' agendamento.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" onclick="DeleteModal({{ agendamento.id }})">
+                                Exluir
+                            </button>
+                        </form>
+                    </div>
+
                 </td>
             </tr>
             {% endfor %}
@@ -45,4 +56,5 @@
          <a href="{% url 'secretaria:pag_secretaria' %}" class="btn btn-primary btn-sm">Voltar</a>
       </div>
     </div>
+
 {% endblock %}

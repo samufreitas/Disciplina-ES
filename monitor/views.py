@@ -1,19 +1,24 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.contrib import messages
 from datetime import datetime
 from django.db import transaction
 from .forms import AgendamentoMonitorForm
-from secretaria.models import Agendamento
+from secretaria.models import Agendamento, Tipo
 from laboratorio.models import Laboratorio
+from django.contrib.auth.decorators import login_required, user_passes_test
 
+def is_monitor(user):
+    return user.groups.filter(name='Monitor').exists()
 
-
-
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_monitor)"""
 def pag_monitor(request):
     return render(request, 'monitor/base_monitor.html')
 
 
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_monitor)"""
 def agendar_monitor(request):
     template_name = 'monitor/agendar_monitor.html'
     context = {}
@@ -21,71 +26,57 @@ def agendar_monitor(request):
     labs = Laboratorio.objects.all()
     context['labs'] = labs
 
-    eventos_a_agendar = []
     if request.method == 'POST':
         form = AgendamentoMonitorForm(request.POST)
         if form.is_valid():
             f = form.save(commit=False)
+            # Verifica se há agendamentos que colidem com a proposta
+            coliding_events = Agendamento.objects.filter(
+                Q(data=f.data) &
+                Q(laboratorio=f.laboratorio) &
+                (
+                        (Q(hora_inicio__lte=f.hora_inicio) & Q(hora_fim__gte=f.hora_inicio)) |
+                        (Q(hora_inicio__lte=f.hora_fim) & Q(hora_fim__gte=f.hora_fim))
+                )
+            )
 
-            if f.hora_fim <= f.hora_inicio:
-                messages.error(request, 'Hora fim deve ser maior que a hora de inicio!')
-            else:
-                # Verifica se a data fornecida é menor que a data atual
-                data_atual = datetime.now().date()
-                if f.data < data_atual:
-                    messages.error(request, 'A data deve ser maior ou igual à data atual!')
+            if coliding_events.exists():
+                if f.tipo.titulo == 'Aula':
+                    messages.error(request, 'Já existe um agendamento conflitante neste horário!')
+                elif f.tipo.titulo == 'Monitoria' and coliding_events.filter(tipo__titulo='Aula').exists():
+                    messages.error(request, 'Já existe uma aula cadastrada nesse horário')
                 else:
-                    # Verifica se há agendamentos que colidem com a proposta
-                    coliding_events = Agendamento.objects.filter(
-                        Q(data=f.data) &
-                        Q(laboratorio=f.laboratorio) &
-                        (
-                                (Q(hora_inicio__lte=f.hora_inicio) & Q(hora_fim__gte=f.hora_inicio)) |
-                                (Q(hora_inicio__lte=f.hora_fim) & Q(hora_fim__gte=f.hora_fim))
-                        )
-                    )
+                    # Se for outra monitoria ou não houver conflito, salva o novo agendamento
+                    f.user = request.user
+                    f.status = 'Solicitado'
+                    f.tipo = get_object_or_404(Tipo, titulo='Monitoria')
+                    f.save()
+                    messages.success(request, 'Solicitação de agendamento realizado com sucesso!')
 
-                    if coliding_events.exists():
-                        if f.tipo == 'Aula':
-                            messages.error(request, 'Já existe um agendamento conflitante neste horário!')
-                        elif f.tipo == 'Monitoria' and coliding_events.filter(tipo='Aula').exists():
-                            messages.error(request, 'Já existe uma aula cadastrada nesse horário')
-                        else:
-                            # Se for outra monitoria ou não houver conflito, salva o novo agendamento
-                            f.user = request.user
-                            f.status = 'Solicitado'
-                            f.tipo = 'Monitoria'
-                            f.save()
-                            messages.success(request, 'Solicitação de agendamento realizado com sucesso!')
-                            return redirect('monitor:lista_monitor')
-                    else:
-                        # Se não houver conflitos, salva o novo agendamento
-                        eventos_a_agendar = [f]
+            else:
+                f.user = request.user
+                f.status = 'Solicitado'
+                f.tipo = get_object_or_404(Tipo, titulo='Monitoria')
+                f.save()
+                messages.success(request, 'Solicitação de agendamento realizado com sucesso!')
+                return redirect('monitor:lista_monitor')
         else:
-            messages.error(request, 'Todos os campos devem ser preenchidos corretamente.')
+            context['form'] = form
+
     else:
         form = AgendamentoMonitorForm()
-
-    context['form'] = form
-    if request.method == 'POST':
-        with transaction.atomic():
-            for evento in eventos_a_agendar:
-                evento.user = request.user
-                evento.status = 'Solicitado'
-                evento.tipo = 'Monitoria'
-                evento.save()
-
-        messages.success(request, 'Solicitação de agendamento realizado com sucesso!')
-        return redirect('monitor:lista_monitor')
-
+        context['form'] = form
     return render(request, template_name, context)
 
 
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_monitor)"""
 def listar_monitor(request):
-    agendamentos = Agendamento.objects.filter(status='Solicitado')
+    agendamentos = Agendamento.objects.all()   #filter(user=request.user)
     return render(request, 'monitor/lista_agendamento_monitor.html', {'agendamentos': agendamentos})
 
-
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_monitor)"""
 def excluir_agendamento(request, agendamento_id):
     try:
         agendamento = Agendamento.objects.get(id=agendamento_id)

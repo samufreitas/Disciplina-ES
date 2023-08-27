@@ -26,9 +26,9 @@
                  <td>{{ agendamento.tipo }}</td>
                  <td>{{ agendamento.status }}</td>
                 <td>
-                    <form id="deleteForm" action="{% url 'monitor:excluir_agendamento' agendamento.id %}" method="post">
+                    <form id="deleteForm{{ agendamento.id }}" action="{% url 'monitor:excluir_agendamento' agendamento.id %}" method="post">
                             {% csrf_token %}
-                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal">
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" onclick="deleteModal({{ agendamento.id }})">
                                 Excluir
                             </button>
                     </form>

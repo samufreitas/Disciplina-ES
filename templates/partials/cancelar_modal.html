@@ -1,0 +1,43 @@
+<!-- partials/Cancelar_modal.html -->
+<div class="modal" id="confirmCancelarModal" tabindex="-1" role="dialog" aria-labelledby="confirmCancelarModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmCancelarModalLabel">Confirmação de cancelamento de agendamento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar" onclick="fecha()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Tem certeza de que deseja cancelar esse agendamento?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="fecha()">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmCancelarBtn" onclick="Cancelar()">Confirma</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let id_Cancelar;
+
+    function CancelarModal(id) {
+        id_Cancelar = id;
+
+        const modal = document.getElementById('confirmCancelarModal');
+        modal.style.display = 'block';
+    }
+
+    function fecha() {
+        const modal = document.getElementById('confirmCancelarModal');
+        modal.style.display = 'none';
+    }
+
+    function Cancelar() {
+        if (id_Cancelar) {
+            var CancelarForm = document.getElementById(`CancelarForm${id_Cancelar}`);
+            CancelarForm.submit();
+        }
+    }
+
+</script>

@@ -93,23 +93,30 @@ def user_new_password(request):
 
 def user_login(request):
     template_name = 'user_login.html'
-
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        if user.last_login is None:
+    try:
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = authenticate(username=username, password=password)
+            if user.last_login is None:
+                if user is not None:
+                    login(request, user)
+                    return redirect('accounts:user_new_password')
             if user is not None:
                 login(request, user)
-                return redirect('accounts:user_new_password')
-        if user is not None:
-            login(request, user)
-            if user.groups.filter(name='Secretaria').exists():
-                return redirect('secretaria:pag_secretaria')
-            elif user.groups.filter(name='Monitor').exists():
-                return redirect('monitor:pag_monitor')
-            elif user.groups.filter(name='Orientador').exists():
-                return redirect('aluno:list_plano')
-        else:
-            messages.error(request, "Usuário ou senha inválidos.")
-    return render(request, template_name, {})
+                if user.groups.filter(name='Secretaria').exists():
+                    return redirect('secretaria:pag_secretaria')
+                elif user.groups.filter(name='Monitor').exists():
+                    return redirect('monitor:pag_monitor')
+                elif user.groups.filter(name='Orientador').exists():
+                    return redirect('aluno:list_plano')
+            else:
+                messages.error(request, "Usuário ou senha inválidos.")
+        return render(request, template_name, {})
+    except:
+        messages.error(request, 'Matrícula ou senha incorretas!')
+        return redirect('accounts:user_login')
+    
+def user_logout(request):
+    logout(request)
+    return redirect('accounts:user_login')

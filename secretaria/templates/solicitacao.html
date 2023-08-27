@@ -12,7 +12,7 @@
                 <th scope="col">Laboratório</th>
                 <th scope="col">Monitor</th>
                 <th scope="col">Status</th>
-                <th scope="col">Ações</th>
+                <th scope="col " class="">Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -27,20 +27,20 @@
                  <td>{{ agendamento.status }}</td>
                 <td>
                     <div class="d-inline-block">
-                        <form id="SolicitaForm" action="{% url 'secretaria:conf_solicitacao' agendamento.id %}" method="post">
+                        <form id="SolicitaForm{{ agendamento.id }}" action="{% url 'secretaria:conf_solicitacao' agendamento.id %}" method="post">
                             {% csrf_token %}
-                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#confirmSolicitaModal">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" onclick="SolicitaModal({{ agendamento.id }})">
                                 Agendar
                             </button>
                         </form>
                     </div>
-                    <div class="d-inline-block ml-2">
-                        <form id="NegarForm" action="{% url 'secretaria:negar_solicitacao' agendamento.id %}" method="post">
+                    <div class="d-inline-block ">
+                        <form id="NegarForm{{ agendamento.id }}" action="{% url 'secretaria:negar_solicitacao' agendamento.id %}" method="post">
                             {% csrf_token %}
-                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmNegarModal">
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" onclick="NegarModal({{ agendamento.id }})">
                                 Negar
                             </button>
-                        </form>
+                    </form>
                     </div>
                 </td>
             </tr>

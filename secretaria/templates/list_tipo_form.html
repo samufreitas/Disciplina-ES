@@ -1,0 +1,37 @@
+{% extends 'secretaria/base_secretaria.html' %}
+{% block container %}
+    <div class="container-fluid">
+    <h5>Listagem de tipos:</h5>
+    <table class="table table-striped4 ">
+        <thead>
+            <tr>
+                <th scope="col">Título</th>
+                <th scope="col">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tipo in tipos %}
+            <tr>
+                <td>{{ tipo.titulo }}</td>
+                <td>
+                   <form id="DeleteForm{{ tipo.id }}" action="{% url 'secretaria:excluir_tipo' tipo.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" onclick="DeleteModal({{ tipo.id }})">
+                                Exluir
+                            </button>
+                    </form>
+                </td>
+                <td>{{ tipo.id }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+         <div class="text-right">
+            <a href="{% url 'secretaria:add_tipo' %}" class="btn btn-success btn-sm">Adicionar novo tipo</a>
+        </div>
+
+    </table>
+      <div class="text-left">
+         <a href="{% url 'secretaria:pag_secretaria' %}" class="btn btn-primary btn-sm">Voltar</a>
+      </div>
+    </div>
+{% endblock %}

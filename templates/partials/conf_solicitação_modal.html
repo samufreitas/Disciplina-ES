@@ -1,29 +1,43 @@
 <!-- partials/Solicita_modal.html -->
-<div class="modal fade" id="confirmSolicitaModal" tabindex="-1" role="dialog" aria-labelledby="confirmSolicitaModalLabel" aria-hidden="true">
+<div class="modal" id="confirmSolicitaModal" tabindex="-1" role="dialog" aria-labelledby="confirmSolicitaModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmSolicitaModalLabel">Confirmação agendamento de solicitação</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                <h5 class="modal-title" id="confirmSolicitaModalLabel">Confirmação de Solicitação</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar" onclick="fecharModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Tem certeza que deseja agendar essa solicitação?
+                Tem certeza que deseja confirma essa solicitação de agendamento?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" id="confirmSolicitaBtn">Agendar</button>
+                <button type="button" class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+                <button type="button" class="btn btn-success" id="confirmSolicitaBtn" onclick="excluirItem()">Confirmar</button>
             </div>
         </div>
     </div>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var confirmSolicitaBtn = document.getElementById("confirmSolicitaBtn");
-        confirmSolicitaBtn.addEventListener("click", function () {
-            var SolicitaForm = document.getElementById("SolicitaForm");
+    let id_Solicita;
+
+    function SolicitaModal(id) {
+        id_Solicita = id;
+
+        const modal = document.getElementById('confirmSolicitaModal');
+        modal.style.display = 'block';
+    }
+
+    function fecharModal() {
+        const modal = document.getElementById('confirmSolicitaModal');
+        modal.style.display = 'none';
+    }
+
+    function excluirItem() {
+        if (id_Solicita) {
+            var SolicitaForm = document.getElementById(`SolicitaForm${id_Solicita}`);
             SolicitaForm.submit();
-        });
-    });
+        }
+    }
+
 </script>

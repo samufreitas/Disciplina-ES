@@ -23,13 +23,13 @@
                     <td>{{ lab.qt_teclado }}</td>
                     <td>{{ lab.qt_teclado }}</td>
                     <td>
-                         <form id="deleteForm" action="{% url 'laboratorio:laboratorio_delete' lab.id %}" method="post">
+                        <form id="DeleteForm{{ lab.id }}" action="{% url 'laboratorio:laboratorio_delete' lab.id %}" method="post">
                             {% csrf_token %}
-                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal">
-                                Excluir
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" onclick="DeleteModal({{ lab.id }})">
+                                Exluir
                             </button>
-                             <a href=" {% url 'laboratorio:laboratorio_update' lab.pk %}" class="btn btn-primary btn-sm"> Editar</a>
-                          </form>
+                            <a href=" {% url 'laboratorio:laboratorio_update' lab.pk %}" class="btn btn-primary btn-sm"> Editar</a>
+                        </form>
                     </td>
                 </tr>
                 {% endfor %}

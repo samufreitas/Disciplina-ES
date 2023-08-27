@@ -1,43 +1,25 @@
 {% load static %}
-
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <title>Login</title>
-    <!-- Bootstrap core CSS -->
-<link href=" {% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-<!-- Custom styles for this template -->
-<link href="{% static 'css/signin.css' %}" rel="stylesheet">
-
-
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
-
-
 
   </head>
-  <body class="text-center">
-    <form class="form-signin" method="POST" action=".">
+  <body>
+
+<div class="text-center">
+    <form method="POST" action="">
+        {% include 'partials/messages.html' %}
     {% csrf_token %}
-        <img class="mb-4" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqeLfhIOe0XgPNsxlB7owqHCw3OCyr5MQ-ebD3lQGGgt9LCJLNPhegdKJ764JoDYLX16U&usqp=CAU" alt="" width="100" height="100">
+        <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="100px" height="120px">
         <h1 class="h3 mb-3 font-weight-normal">Universidade Federal do Acre</h1>
         <label for="username" class="sr-only">Usuário</label>
         <input type="text" id="username" name="username" class="form-control" placeholder="Digite sua matrícula" required autofocus>
@@ -47,8 +29,7 @@
         <br>
         <a  href="{% url 'password_reset' %}" class="form-control"> Esqueceu sua senha?</a>
     </form>
-
-
+</div >
 
   </body>
 </html>
