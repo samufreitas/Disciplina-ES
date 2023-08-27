@@ -60,8 +60,6 @@ def adicionar_evento(request):
             ).exclude(status='Cancelado')
 
             if coliding_events.exists():
-                print(f.tipo.titulo)
-                print(coliding_events.filter(tipo__titulo='Monitoria').exists())
                 if f.tipo.titulo == 'Monitoria' and coliding_events.filter(tipo__titulo='Monitoria').exists():
                     f.status = 'Agendado'
                     f.titulo = f.titulo.capitalize()
