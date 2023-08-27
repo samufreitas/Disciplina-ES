@@ -68,7 +68,7 @@ def agendar_monitor(request):
 def listar_monitor(request):
     template_name = 'monitor/lista_agendamento_monitor.html'
     consulta = Agendamento.objects.all()   #filter(user=request.user)
-    paginator = Paginator(consulta, 3)
+    paginator = Paginator(consulta, 2)
 
     page_number = request.GET.get("page")
     agendamentos = paginator.get_page(page_number)

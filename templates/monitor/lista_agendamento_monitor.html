@@ -41,9 +41,6 @@
         </div>
 
     </table>
-      <div class="text-left">
-         <a href="{% url 'monitor:pag_monitor' %}" class="btn btn-primary btn-sm">Voltar</a>
-      </div>
       <div class="pagination d-flex justify-content-center align-items-center">
             <span class="step-links">
                 {% if agendamentos.has_previous %}
@@ -58,6 +55,9 @@
                     <a href="?page={{ agendamentos.paginator.num_pages }}" class="btn btn-secondary">último &raquo;</a>
                 {% endif %}
             </span>
+      </div>
+      <div class="text-left">
+         <a href="{% url 'monitor:pag_monitor' %}" class="btn btn-primary btn-sm">Voltar</a>
       </div>
 </div>
 

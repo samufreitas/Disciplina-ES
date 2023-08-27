@@ -83,16 +83,26 @@ def adicionar_evento(request):
 """@login_required(login_url='/contas/login/')
 @user_passes_test(is_secretaria)"""
 def listar_agendamentos(request):
-    agendamentos = Agendamento.objects.exclude(status='Solicitado')
-    return render(request, 'listagem_agendamentos.html', {'agendamentos': agendamentos})
+    template_name = 'listagem_agendamentos.html'
+    consulta = Agendamento.objects.exclude(status='Solicitado')
+    paginator = Paginator(consulta, 10)
+
+    page_number = request.GET.get("page")
+    agendamentos = paginator.get_page(page_number)
+    context = {
+        'agendamentos': agendamentos
+    }
+    return render(request, template_name, context)
 
 def cancelar_agendamento(request, agendamento_id):
     try:
         agendamento = Agendamento.objects.get(id=agendamento_id)
-        agendamento.status = 'Cancelado'
-        agendamento.save()
-        messages.warning(request, "Agendamento cancelado!")
-
+        if agendamento.status != 'Cancelado':
+            agendamento.status = 'Cancelado'
+            agendamento.save()
+            messages.warning(request, "Agendamento cancelado!")
+        else:
+            messages.error(request, 'Esse agendamento já está cancelado!')
     except Agendamento.DoesNotExist:
         messages.error(request, "Solicitação não encontrado.")
 
@@ -100,9 +110,16 @@ def cancelar_agendamento(request, agendamento_id):
 """@login_required(login_url='/contas/login/')
 @user_passes_test(is_secretaria)"""
 def listar_solicitacao(request):
-    agendamentos = Agendamento.objects.filter(tipo__titulo='Monitoria')
+    template_name = 'solicitacao.html'
+    consulta = Agendamento.objects.filter(tipo__titulo='Monitoria')
+    paginator = Paginator(consulta, 10)
 
-    return render(request, 'solicitacao.html', {'agendamentos': agendamentos})
+    page_number = request.GET.get("page")
+    agendamentos = paginator.get_page(page_number)
+    context = {
+        'agendamentos': agendamentos
+    }
+    return render(request, template_name, context)
 
 """@login_required(login_url='/contas/login/')
 @user_passes_test(is_secretaria)"""
@@ -204,8 +221,16 @@ def add_tipo(request):
 
 
 def list_tipo(request):
-    tipos = Tipo.objects.all()
-    return render(request, 'list_tipo_form.html', {'tipos': tipos})
+    template_name = 'list_tipo_form.html'
+    consulta = Tipo.objects.all()
+    paginator = Paginator(consulta, 10)
+
+    page_number = request.GET.get("page")
+    tipos = paginator.get_page(page_number)
+    context = {
+        'tipos': tipos
+    }
+    return render(request, template_name, context)
 
 def excluir_tipo(request, tipo_id):
     try:

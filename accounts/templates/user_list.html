@@ -42,6 +42,21 @@
                 <a href=" {% url 'accounts:user_create'%}" class="btn btn-success btn-sm">Adicionar novo usuário</a>
             </div>
         </table>
+        <div class="pagination d-flex justify-content-center align-items-center">
+            <span class="step-links">
+                {% if users.has_previous %}
+                    <a href="?page=1" class="btn btn-secondary">&laquo; primeiro</a>
+                    <a href="?page={{ users.previous_page_number }}" class="btn btn-secondary">anterior</a>
+                {% endif %}
+                <span class="current">
+                    Página {{ users.number }} de {{ users.paginator.num_pages }}.
+                </span>
+                {% if users.has_next %}
+                    <a href="?page={{ users.next_page_number }}" class="btn btn-secondary">próximo</a>
+                    <a href="?page={{ users.paginator.num_pages }}" class="btn btn-secondary">último &raquo;</a>
+                {% endif %}
+            </span>
+      </div>
         <div class="text-left">
             <a href="{% url 'secretaria:pag_secretaria' %}" class="btn btn-primary btn-sm">Voltar</a>
         </div>

@@ -1,7 +1,7 @@
 {% extends 'secretaria/base_secretaria.html' %}
 {% block container %}
     <div class="container">
-      <h1>Atualizar laboratorio:</h1>
+      <h5 class="mt-4">Atualizar laboratorio:</h5>
       <form action="." method="post">
           {% csrf_token %}
           {% include 'partials/messages.html' %}

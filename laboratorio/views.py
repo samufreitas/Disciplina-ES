@@ -4,10 +4,18 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Laboratorio
 from .forms import LaboratorioForm
-
+from django.core.paginator import Paginator
 def list_lab(request):
-    labs = Laboratorio.objects.all()
-    return render(request, 'laboratorio_list.html', {'labs': labs})
+    template_name = 'laboratorio_list.html'
+    consulta = Laboratorio.objects.all()
+    paginator = Paginator(consulta, 10)
+
+    page_number = request.GET.get("page")
+    labs = paginator.get_page(page_number)
+    context = {
+        'labs': labs
+    }
+    return render(request, template_name, context)
 
 class LaboratorioCreateView(CreateView):
     model = Laboratorio

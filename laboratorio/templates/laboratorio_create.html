@@ -1,7 +1,7 @@
 {% extends 'secretaria/base_secretaria.html' %}
 {% block container %}
     <div class="container">
-      <h1>Cadastro de Laboratório:</h1>
+      <h5 class="mt-4">Cadastro de Laboratório:</h5>
       <form method="post" action=".">
         {% csrf_token %}
           {% include 'partials/messages.html' %}

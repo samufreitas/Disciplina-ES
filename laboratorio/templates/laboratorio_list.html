@@ -1,7 +1,7 @@
 {% extends 'secretaria/base_secretaria.html' %}
 {% block container %}
     <div class="container">
-        <h1 class="mt-4">Listagem de laboratórios</h1>
+        <h5 class="mt-4">Listagem de laboratórios</h5>
         <table class="table table-striped">
             {% include 'partials/messages.html' %}
             <thead>
@@ -38,6 +38,21 @@
                 <a href=" {% url 'laboratorio:laboratorio_create'%}" class="btn btn-success btn-sm">Adicionar laboratório</a>
             </div>
         </table>
+        <div class="pagination d-flex justify-content-center align-items-center">
+            <span class="step-links">
+                {% if labs.has_previous %}
+                    <a href="?page=1" class="btn btn-secondary">&laquo; primeiro</a>
+                    <a href="?page={{ labs.previous_page_number }}" class="btn btn-secondary">anterior</a>
+                {% endif %}
+                <span class="current">
+                    Página {{ labs.number }} de {{ labs.paginator.num_pages }}.
+                </span>
+                {% if labs.has_next %}
+                    <a href="?page={{ labs.next_page_number }}" class="btn btn-secondary">próximo</a>
+                    <a href="?page={{ labs.paginator.num_pages }}" class="btn btn-secondary">último &raquo;</a>
+                {% endif %}
+            </span>
+      </div>
         <div class="text-left">
          <a href="{% url 'secretaria:pag_secretaria' %}" class="btn btn-primary btn-sm">Voltar</a>
       </div>

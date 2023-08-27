@@ -47,8 +47,23 @@
             {% endfor %}
         </tbody>
     </table>
-      <div class="text-left">
-         <a href="{% url 'secretaria:pag_secretaria' %}" class="btn btn-primary btn-sm">Voltar</a>
+    <div class="pagination d-flex justify-content-center align-items-center">
+            <span class="step-links">
+                {% if agendamentos.has_previous %}
+                    <a href="?page=1" class="btn btn-secondary">&laquo; primeiro</a>
+                    <a href="?page={{ agendamentos.previous_page_number }}" class="btn btn-secondary">anterior</a>
+                {% endif %}
+                <span class="current">
+                    Página {{ agendamentos.number }} de {{ agendamentos.paginator.num_pages }}.
+                </span>
+                {% if agendamentos.has_next %}
+                    <a href="?page={{ agendamentos.next_page_number }}" class="btn btn-secondary">próximo</a>
+                    <a href="?page={{ agendamentos.paginator.num_pages }}" class="btn btn-secondary">último &raquo;</a>
+                {% endif %}
+            </span>
       </div>
+    <div class="text-left">
+        <a href="{% url 'secretaria:pag_secretaria' %}" class="btn btn-primary btn-sm">Voltar</a>
+    </div>
     </div>
 {% endblock %}

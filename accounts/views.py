@@ -7,6 +7,7 @@ from django.views.generic import UpdateView, DeleteView
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.models import User, Group
 from .forms import UserForm
+from django.core.paginator import Paginator
 
 def add_user(request):
     template_name = 'user_create.html'
@@ -40,8 +41,16 @@ def add_user(request):
     context['form'] = form
     return render(request, template_name, context)
 def list_user(request):
-    users = User.objects.filter(is_superuser=False)
-    return render(request, 'user_list.html', {'users': users})
+    template_name = 'user_list.html'
+    consulta = User.objects.filter(is_superuser=False)
+    paginator = Paginator(consulta, 10)
+
+    page_number = request.GET.get("page")
+    users = paginator.get_page(page_number)
+    context = {
+        'users': users
+    }
+    return render(request, template_name, context)
 
 
 class UserEditForm(forms.ModelForm):
