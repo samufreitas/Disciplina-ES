@@ -1,4 +1,4 @@
-{% extends 'monitor/base_monitor.html' %}
+{% extends 'professor/base_professor.html' %}
 {% block container %}
     <div class="container-fluid">
     <h5 class="mt-4">Lista de solicitações:</h5>
@@ -10,7 +10,6 @@
                 <th scope="col">Hora de Início</th>
                 <th scope="col">Hora de Término</th>
                 <th scope="col">Laboratório</th>
-                <th scope="col">Tipo</th>
                 <th scope="col">Status</th>
                 <th scope="col">Ações</th>
             </tr>
@@ -23,12 +22,11 @@
                 <td>{{ agendamento.hora_inicio }}</td>
                 <td>{{ agendamento.hora_fim }}</td>
                  <td>{{ agendamento.laboratorio }}</td>
-                 <td>{{ agendamento.user }}</td>
                  <td>{{ agendamento.status }}</td>
                 <td>
-                    <form id="deleteForm" action="{% url 'professor:excluir_agendamento' agendamento.id %}" method="post">
+                    <form id="DeleteForm{{ agendamento.id }}" action="{% url 'professor:excluir_agendamento' agendamento.id %}" method="post">
                             {% csrf_token %}
-                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal">
+                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" onclick="DeleteModal({{ agendamento.id }})">
                                 Excluir
                             </button>
                     </form>
@@ -41,6 +39,21 @@
         </div>
 
     </table>
+    <div class="pagination d-flex justify-content-center align-items-center">
+            <span class="step-links">
+                {% if agendamentos.has_previous %}
+                    <a href="?page=1" class="btn btn-secondary">&laquo; primeiro</a>
+                    <a href="?page={{ agendamentos.previous_page_number }}" class="btn btn-secondary">anterior</a>
+                {% endif %}
+                <span class="current">
+                    Página {{ agendamentos.number }} de {{ agendamentos.paginator.num_pages }}.
+                </span>
+                {% if agendamentos.has_next %}
+                    <a href="?page={{ agendamentos.next_page_number }}" class="btn btn-secondary">próximo</a>
+                    <a href="?page={{ agendamentos.paginator.num_pages }}" class="btn btn-secondary">último &raquo;</a>
+                {% endif %}
+            </span>
+      </div>
       <div class="text-left">
          <a href="{% url 'professor:pag_professor' %}" class="btn btn-primary btn-sm">Voltar</a>
       </div>
