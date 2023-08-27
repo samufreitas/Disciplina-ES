@@ -3,7 +3,7 @@
 {% extends 'secretaria/base_secretaria.html' %}
 {% block container %}
 <div class="container">
-  <h5>Cadastro de usuários:</h5>
+  <h5 class="mt-4">Cadastro de usuários:</h5>
   <form action="" method="post" onsubmit="return validarSenha() && validarMatricula()">
     {% csrf_token %}
       {% include 'partials/messages.html' %}
