@@ -7,8 +7,9 @@
         {% csrf_token %}
         <div class="form-group">
                 <label for="{{ form.titulo.id_for_label }}">Nome do tipo:</label>
-                {{form.titulo|add_class:"form-control"|attr:"autofocus" }}
-                <span style="color: red">{{ form.titulo.errors }}</span>
+                <small class="form-text  text-danger mt-0">Campo obrigatório.</small>
+                {{form.titulo|add_class:"form-control"|attr:"autofocus"|attr:"placeholder:Ex: Aula" }}
+
             </div>
         <div class="container">
             <button type="submit" class="btn btn-success float-right">Agendar</button>

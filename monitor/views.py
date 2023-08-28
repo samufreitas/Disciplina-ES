@@ -10,14 +10,14 @@ from django.core.paginator import Paginator
 def is_monitor(user):
     return user.groups.filter(name='Monitor').exists()
 
-"""@login_required(login_url='/contas/login/')
-@user_passes_test(is_monitor)"""
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_monitor)
 def pag_monitor(request):
     return render(request, 'monitor/base_monitor.html')
 
 
-"""@login_required(login_url='/contas/login/')
-@user_passes_test(is_monitor)"""
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_monitor)
 def agendar_monitor(request):
     template_name = 'monitor/agendar_monitor.html'
     context = {}
@@ -63,12 +63,12 @@ def agendar_monitor(request):
     context['form'] = form
     return render(request, template_name, context)
 
-"""@login_required(login_url='/contas/login/')
-@user_passes_test(is_monitor)"""
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_monitor)
 def listar_monitor(request):
     template_name = 'monitor/lista_agendamento_monitor.html'
-    consulta = Agendamento.objects.all()   #filter(user=request.user)
-    paginator = Paginator(consulta, 2)
+    consulta = Agendamento.objects.filter(user=request.user)
+    paginator = Paginator(consulta, 8)
 
     page_number = request.GET.get("page")
     agendamentos = paginator.get_page(page_number)
@@ -77,8 +77,8 @@ def listar_monitor(request):
     }
     return render(request, template_name, context)
 
-"""@login_required(login_url='/contas/login/')
-@user_passes_test(is_monitor)"""
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_monitor)
 def excluir_agendamento(request, agendamento_id):
     try:
         agendamento = Agendamento.objects.get(id=agendamento_id)

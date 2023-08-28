@@ -27,9 +27,9 @@
                         {% endfor %}
                     </td>
                     <td>
-                         <form id="deleteForm" action="{% url 'accounts:user_delete' user.id %}" method="post">
+                         <form id="DeleteForm{{ user.id }}" action="{% url 'accounts:user_delete' user.id %}" method="post">
                             {% csrf_token %}
-                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal">
+                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" onclick="DeleteModal({{ user.id }})">
                                 Excluir
                             </button>
                              <a href=" {% url 'accounts:user_update' user.pk %}" class="btn btn-primary btn-sm"> Editar</a>

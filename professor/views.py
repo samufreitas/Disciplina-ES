@@ -5,13 +5,18 @@ from .forms import AgendamentoProfessorForm
 from secretaria.models import Agendamento, Tipo
 from laboratorio.models import Laboratorio
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required, user_passes_test
+def is_professor(user):
+    return user.groups.filter(name='Professor').exists()
 
-
-
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_professor)
 def pag_professor(request):
     return render(request, 'professor/base_professor.html')
 
 
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_professor)
 def agendar_professor(request):
     template_name = 'professor/agendar_professor.html'
     context = {}
@@ -48,9 +53,11 @@ def agendar_professor(request):
     return render(request, template_name, context)
 
 
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_professor)
 def listar_professor(request):
     template_name = 'professor/lista_agendamento_professor.html'
-    consulta = Agendamento.objects.filter(status='Agendado')
+    consulta = Agendamento.objects.filter(user=request.user)
     paginator = Paginator(consulta, 10)
 
     page_number = request.GET.get("page")
@@ -61,6 +68,8 @@ def listar_professor(request):
     return render(request, template_name, context)
 
 
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_professor)
 def excluir_agendamento(request, agendamento_id):
     try:
         agendamento = Agendamento.objects.get(id=agendamento_id)

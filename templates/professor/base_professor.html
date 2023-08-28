@@ -38,7 +38,6 @@
           <h2 id="titulo">Sistema de agendamento </h2>
           <a class="btn btn-danger " href="{% url 'accounts:user_logout' %}">Sair</a>
         </nav>
-{% comment %} menu lateral {% endcomment %}
         {% include 'partials/messages.html' %}
         {% include 'partials/delete_modal.html' %}
         <nav>
@@ -53,8 +52,7 @@
                     <div class="side">
 
                         {% block container %}
-                            {% include 'partials/messages.html' %}
-                            {% include 'partials/delete_modal.html' %}
+
                         {% endblock %}
                     </div>
                  </div>

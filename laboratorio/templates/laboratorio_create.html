@@ -4,11 +4,10 @@
       <h5 class="mt-4">Cadastro de Laboratório:</h5>
       <form method="post" action=".">
         {% csrf_token %}
-          {% include 'partials/messages.html' %}
-
             <div class="form-group">
               <label for="id_name">Nome do Laboratório:</label>
-              <input type="text" class="form-control" id="id_name" name="name" autofocus required>
+              <small class="form-text  text-danger mt-0">Campo obrigatório.</small>
+              <input type="text" class="form-control" id="id_name" name="name" placeholder="Ex: Lab1" autofocus required>
             </div>
             <div class="form-group">
               <label for="id_qt_monitor">Quantidade monitor:</label>

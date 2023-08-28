@@ -15,29 +15,34 @@
         {% endif %}
         <div class="form-group">
             <label for="{{ form.titulo.id_for_label }}">Título do agendamento:</label>
-            {{ form.titulo|add_class:"form-control"|attr:"autofocus" }}
+            <small class="form-text  text-danger mt-0">Campo obrigatório.</small>
+            {{ form.titulo|add_class:"form-control"|attr:"autofocus"|attr:"placeholder:Ex: Monitoria de Estrutura de Dados" }}
         </div>
         <div class="row">
             <div class="col">
                 <label for="{{ form.data.id_for_label }}">Data:</label>
+                <small class="form-text  text-danger mt-0">Campo obrigatório.</small>
                 {{form.data|add_class:"form-control"|attr:"type:date" }}
             </div>
             <div class="col">
                 <label for="{{ form.hora_inicio.id_for_label }}">Horário inicio:</label>
+                <small class="form-text  text-danger mt-0">Campo obrigatório.</small>
                 {{form.hora_inicio|add_class:"form-control"|attr:"type:time" }}
             </div>
             <div class="col">
                 <label for="{{ form.hora_fim.id_for_label }}">Horário fim:</label>
+                <small class="form-text  text-danger mt-0">Campo obrigatório.</small>
                 {{form.hora_fim|add_class:"form-control"|attr:"type:time" }}
             </div>
         </div>
         <div class="form-group">
             <label for="{{ form.laboratorio.id_for_label }}">Laboratótio:</label>
+            <small class="form-text  text-danger mt-0">Campo obrigatório.</small>
             {{form.laboratorio|add_class:"form-control" }}
         </div>
         <div class="form-group">
-            <label for="id_opicional">Opicional:</label>
-             {{form.opicional|add_class:"form-control"|attr:"type:text" }}
+            <label for="id_opicional">Opcional:</label>
+             {{form.opicional|add_class:"form-control"|attr:"type:text"|attr:"placeholder:Observações:" }}
         </div>
         <div class="container">
             <button type="submit" class="btn btn-success float-right">Agendar</button>

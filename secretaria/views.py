@@ -25,13 +25,13 @@ def is_secretaria(user):
 
 
 
-"""@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)"""
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)
 def pag_secretaria(request):
     return render(request, 'secretaria/base_secretaria.html')
 
-"""@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)"""
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)
 def adicionar_evento(request):
     template_name = 'agenda.html'
     context = {}
@@ -80,8 +80,8 @@ def adicionar_evento(request):
     context['form'] = form
     return render(request, template_name, context)
 
-"""@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)"""
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)
 def listar_agendamentos(request):
     template_name = 'listagem_agendamentos.html'
     consulta = Agendamento.objects.exclude(status='Solicitado')
@@ -94,6 +94,8 @@ def listar_agendamentos(request):
     }
     return render(request, template_name, context)
 
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)
 def cancelar_agendamento(request, agendamento_id):
     try:
         agendamento = Agendamento.objects.get(id=agendamento_id)
@@ -107,8 +109,10 @@ def cancelar_agendamento(request, agendamento_id):
         messages.error(request, "Solicitação não encontrado.")
 
     return redirect('secretaria:lista')
-"""@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)"""
+
+
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)
 def listar_solicitacao(request):
     template_name = 'solicitacao.html'
     consulta = Agendamento.objects.filter(tipo__titulo='Monitoria')
@@ -121,8 +125,8 @@ def listar_solicitacao(request):
     }
     return render(request, template_name, context)
 
-"""@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)"""
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)
 def conf_solicitacao(request, agendamento_id):
     agendamento = Agendamento.objects.get(id=agendamento_id)
     if agendamento.status != 'Agendado':
@@ -151,9 +155,9 @@ def conf_solicitacao(request, agendamento_id):
         messages.error(request, 'Essa solicitação já foi agendada!')
     return redirect('secretaria:listar_solicitacao')
 
-"""@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)"""
 
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)
 def negar_solicitacao(request, agendamento_id):
     try:
         agendamento = Agendamento.objects.get(id=agendamento_id)
@@ -181,8 +185,8 @@ def negar_solicitacao(request, agendamento_id):
 
     return redirect('secretaria:listar_solicitacao')
 
-"""@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)"""
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)
 def excluir_agendamento(request, agendamento_id):
     try:
         agendamento = Agendamento.objects.get(id=agendamento_id)
@@ -195,7 +199,8 @@ def excluir_agendamento(request, agendamento_id):
 
 
 
-
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)
 def add_tipo(request):
     template_name = 'tipo_form.html'
     context = {}
@@ -219,7 +224,8 @@ def add_tipo(request):
     return render(request, template_name, context)
 
 
-
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)
 def list_tipo(request):
     template_name = 'list_tipo_form.html'
     consulta = Tipo.objects.all()
@@ -232,6 +238,8 @@ def list_tipo(request):
     }
     return render(request, template_name, context)
 
+@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)
 def excluir_tipo(request, tipo_id):
     try:
         tipo = Tipo.objects.get(id=tipo_id)
@@ -241,6 +249,7 @@ def excluir_tipo(request, tipo_id):
         messages.error(request, "Tipo não encontrado.")
 
     return redirect('secretaria:list_tipo')
+
 
 def eventos(request):
     eventos = Agendamento.objects.all()

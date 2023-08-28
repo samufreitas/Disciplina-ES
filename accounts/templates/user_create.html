@@ -1,44 +1,50 @@
-
-
 {% extends 'secretaria/base_secretaria.html' %}
+{% load widget_tweaks %}
 {% block container %}
 <div class="container">
   <h5 class="mt-4">Cadastro de usuários:</h5>
   <form action="" method="post" onsubmit="return validarSenha() && validarMatricula()">
     {% csrf_token %}
-      {% include 'partials/messages.html' %}
-        {% if messages %}
-            <div class="alert alert-danger">
-                <ul>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ form.non_field_errors }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         {% endif %}
-
         <div class="form-group">
-          <label for="first_name">Nome:</label>
-          <input type="text" class="form-control" id="first_name" name="first_name" required>
+            <div class="row">
+                <div class="col">
+                    <label for="first_name">Nome:</label>
+                    <small class="form-text  text-danger mt-0">Campo obrigatório.</small>
+                    {{form.first_name|add_class:"form-control"|attr:"placeholder:Ex: Fulano"}}
+                </div>
+                <div class="col">
+                    <label for="last_name">Sobrenome:</label>
+                    <small class="form-text  text-danger mt-0">Campo obrigatório.</small>
+                    {{form.last_name|add_class:"form-control"|attr:"placeholder:Ex: De tal"}}
+                </div>
+            </div>
         </div>
 
         <div class="form-group">
-          <label for="last_name">Sobrenome:</label>
-          <input type="text" class="form-control" id="last_name" name="last_name" required>
+            <div class="row">
+                <div class="col">
+                    <label for="username">Matrícula ou SIAPE:</label>
+                    <small class="form-text  text-danger mt-0">Campo obrigatório.</small>
+                    {{form.username|add_class:"form-control"|attr:"type:number"|attr:"placeholder:Ex: 2020.."}}
+                </div>
+                <div class="col">
+                    <label for="email">Email:</label>
+                    <small class="form-text  text-danger mt-0">Campo obrigatório.</small>
+                    {{form.email|add_class:"form-control"|attr:"placeholder:Ex: ad@gmail.com "}}
+                </div>
+            </div>
         </div>
-
-        <div class="form-group">
-          <label for="username">Matrícula ou SIAPE:</label>
-          <input type="number" class="form-control" id="username" minlength="8" name="username" required>
-        </div>
-
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-
         <div class="form-group">
             <label for="group">Grupo:</label>
+                <small class="form-text  text-danger mt-0">Campo obrigatório.</small>
                 <select class="form-control" id="group" name="groups" required>
                     {% for group in groups %}
                         <option value="{{ group.id }}">{{ group.name }}</option>
@@ -48,7 +54,8 @@
 
         <div class="form-group">
           <label for="password">Senha:</label>
-          <input type="password" class="form-control" id="password" name="password" required>
+          <small class="form-text  text-danger mt-0">Campo obrigatório.</small>
+          {{form.password|add_class:"form-control"|attr:"type:password"}}
         </div>
         <div class="container">
                 <button type="submit" class="btn btn-success float-right">Cadastrar</button>
