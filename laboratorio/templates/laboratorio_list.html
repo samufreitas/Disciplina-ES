@@ -2,26 +2,20 @@
 {% block container %}
     <div class="container">
         <h5 class="mt-4">Listagem de laboratórios</h5>
-        <table class="table table-striped">
+        <table class="table table-striped container-fluid mt-4">
             <thead>
                 <tr>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Qunatidade monitor</th>
-                    <th scope="col">Quantidade notebook</th>
-                    <th scope="col">Quantidade teclado</th>
-                    <th scope="col">Quantidade mouse</th>
-                    <th scope="col">Ações</th>
+                    <th class="col-sm-4 text-center">Nome</th>
+                    <th class="col-sm-4 text-center">Qunatidade de maquinas</th>
+                    <th class="col-sm-4 text-center">Ações</th>
                 </tr>
             </thead>
             <tbody>
                 {% for lab in labs %}
                 <tr>
-                    <td>{{ lab.name }}</td>
-                    <td>{{ lab.qt_monitor }}</td>
-                    <td>{{ lab.qt_notebook }}</td>
-                    <td>{{ lab.qt_teclado }}</td>
-                    <td>{{ lab.qt_teclado }}</td>
-                    <td>
+                    <td class="text-center">{{ lab.name }}</td>
+                    <td class="text-center">{{ lab.qt_maquinas }}</td>
+                    <td class="text-center">
                         <form id="DeleteForm{{ lab.id }}" action="{% url 'laboratorio:excluir_lab' lab.id %}" method="post">
                             {% csrf_token %}
                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" onclick="DeleteModal({{ lab.id }})">

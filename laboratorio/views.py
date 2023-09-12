@@ -16,7 +16,7 @@ def list_lab(request):
     if query:
         consulta = consulta.filter(
             Q(name__icontains=query))
-    paginator = Paginator(consulta, 10)
+    paginator = Paginator(consulta, 8)
 
     page_number = request.GET.get("page")
     labs = paginator.get_page(page_number)
@@ -33,7 +33,7 @@ class LaboratorioCreateView(CreateView):
 
     def form_valid(self, form):
         if Laboratorio.objects.filter(name=form.cleaned_data['name']).exists():
-            messages.error(self.request, "Já exixte um laboratório com esse nome!")
+            messages.error(self.request, "Já existe um laboratório com esse nome!")
             return self.form_invalid(form)
         messages.success(self.request, "Laboratório cadastrado com sucesso!")
         return super().form_valid(form)
@@ -41,7 +41,7 @@ class LaboratorioCreateView(CreateView):
 class LaboratorioUpdateView(UpdateView):
     model = Laboratorio
     template_name = 'laboratorio_update.html'
-    fields = ['qt_monitor', 'qt_notebook', 'qt_teclado', 'qt_mouse']
+    fields = ['qt_maquinas',]
     success_url = reverse_lazy('laboratorio:laboratorio_list')
 
     def form_valid(self, form):
@@ -62,8 +62,8 @@ def excluir_lab(request, lab_id):
             messages.error(request, "Este laboratório está relacionado a agendamentos e não pode ser excluído.")
         else:
             lab.delete()
-            messages.success(request, "Tipo excluído!")
+            messages.success(request, "Laboratório excluído com sucesso!")
     except Laboratorio.DoesNotExist:
-        messages.error(request, "Tipo não encontrado.")
+        messages.error(request, "Laboratório não encontrado.")
 
     return redirect('laboratorio:laboratorio_list')
