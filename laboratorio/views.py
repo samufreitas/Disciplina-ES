@@ -41,10 +41,13 @@ class LaboratorioCreateView(CreateView):
 class LaboratorioUpdateView(UpdateView):
     model = Laboratorio
     template_name = 'laboratorio_update.html'
-    fields = ['qt_maquinas',]
+    fields = ['name', 'qt_maquinas',]
     success_url = reverse_lazy('laboratorio:laboratorio_list')
 
     def form_valid(self, form):
+        if Laboratorio.objects.filter(name=form.cleaned_data['name']).exists():
+            messages.error(self.request, "Já existe um laboratório com esse nome!")
+            return self.form_invalid(form)
         messages.success(self.request, "Atualização realizada com sucesso!")
         return super().form_valid(form)
 
