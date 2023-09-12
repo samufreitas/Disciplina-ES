@@ -16,6 +16,7 @@
             </tr>
         </thead>
         <tbody>
+
             {% for agendamento in agendamentos %}
             <tr>
                 <td>{{ agendamento.titulo }}</td>
@@ -42,15 +43,42 @@
                             </button>
                         </form>
                     </div>
-
                 </td>
             </tr>
             {% endfor %}
         </tbody>
-         <div class="text-right">
-            <a href="{% url 'secretaria:agendar' %}" class="btn btn-success btn-sm">Adicionar novo agendamento</a>
+        <div class="container mt-3">
+            <div class="row my-3">
+                <div class="col-md-8">
+                    <form method="POST" class="form-inline">
+                        {% csrf_token %}
+                        <div class="input-group"> <!-- Use uma classe input-group para agrupar o campo de entrada e o botão -->
+                            <input type="text" name="query" placeholder="Pesquisar por título, laboratório e tipo" class="form-control" value="{{ query|default:'' }}">
+                            <select name="status1" class="form-select mx-2">
+                                <option value="">Filtrar por status</option>
+                                <option value="">Todos</option>
+                                <option value="Agendado">Agendado</option>
+                                <option value="Cancelado">Cancelado</option>
+                                <option value="Negado">Negado</option>
+                            </select>
+                            <select name="data" class="form-select mx-2">
+                                <option value="">Filtrar por data</option>
+                                <option value="todas">Todas</option>
+                                <option value="hoje">Hoje</option>
+                                <option value="proxima_semana">Próxima 7 dias</option>
+                                <option value="proxima_mes">Próxima 30 dias</option>
+                                <option value="semana_anterior">7 dias anterior</option>
+                                <option value="mes_anterior">30 dias anterior</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary">Pesquisar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-4 text-md-right">
+                    <a href="{% url 'secretaria:agendar' %}" class="btn btn-success">Adicionar novo agendamento</a>
+                </div>
+            </div>
         </div>
-
     </table>
     <div class="pagination d-flex justify-content-center align-items-center">
             <span class="step-links">

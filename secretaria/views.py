@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, Http404
-from django.core.mail import send_mail
+from django.utils import timezone
 from django.db.models import Q
-from django.contrib import messages
-from datetime import datetime
 from django.db import transaction
 from .forms import AgendamentoForm, TipoForm
 from .models import Agendamento, Tipo
@@ -12,7 +10,7 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.contrib import messages
 from decouple import config
-
+from datetime import date, timedelta
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import get_object_or_404
@@ -25,13 +23,13 @@ def is_secretaria(user):
 
 
 
-@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)"""
 def pag_secretaria(request):
     return render(request, 'secretaria/base_secretaria.html')
 
-@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)"""
 def adicionar_evento(request):
     template_name = 'agenda.html'
     context = {}
@@ -80,22 +78,58 @@ def adicionar_evento(request):
     context['form'] = form
     return render(request, template_name, context)
 
-@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)
+
+
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)"""
 def listar_agendamentos(request):
     template_name = 'listagem_agendamentos.html'
+    query = request.POST.get('query')
+    status1 = request.POST.get('status1')
+    data = request.POST.get('data')
+    data_atual = timezone.now()
     consulta = Agendamento.objects.exclude(status='Solicitado')
-    paginator = Paginator(consulta, 10)
 
+    # Parte para retorna o filtro por datas
+    if data == 'hoje':
+        consulta = consulta.filter(data=data_atual.date())
+    elif data == 'proxima_semana':
+        data_futuro = data_atual + timedelta(days=7)
+        consulta = consulta.filter(data__range=[data_atual.date(), data_futuro.date()])
+    elif data == 'proxima_mes':
+        data_futuro = data_atual + timedelta(days=30)
+        consulta = consulta.filter(data__range=[(data_atual + timedelta(days=1)).date(), data_futuro.date()])
+    elif data == 'semana_anterior':
+        data_passado = data_atual - timedelta(days=7)
+        consulta = consulta.filter(data__range=[data_passado.date(), (data_atual - timedelta(days=1)).date()])
+    elif data == 'mes_anterior':
+        data_passado = data_atual - timedelta(days=30)
+        consulta = consulta.filter(data__range=[data_passado.date(), (data_atual - timedelta(days=1)).date()])
+    elif data == 'todas':
+        pass
+
+    if query:
+        consulta = consulta.filter(
+            Q(titulo__icontains=query) |
+            Q(tipo__titulo__icontains=query) |
+            Q(laboratorio__name__icontains=query))
+
+    if status1:
+        consulta = consulta.filter(status=status1)
+    paginator = Paginator(consulta, 8)
     page_number = request.GET.get("page")
     agendamentos = paginator.get_page(page_number)
+
     context = {
-        'agendamentos': agendamentos
+        'agendamentos': agendamentos,
+        'query': query,
+        'status1': status1,
+        'data': data,
     }
     return render(request, template_name, context)
 
-@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)"""
 def cancelar_agendamento(request, agendamento_id):
     try:
         agendamento = Agendamento.objects.get(id=agendamento_id)
@@ -111,13 +145,43 @@ def cancelar_agendamento(request, agendamento_id):
     return redirect('secretaria:lista')
 
 
-@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)"""
 def listar_solicitacao(request):
     template_name = 'solicitacao.html'
+    query = request.POST.get('query')
+    status1 = request.POST.get('status1')
+    data = request.POST.get('data')
+    data_atual = timezone.now()
     consulta = Agendamento.objects.filter(tipo__titulo='Monitoria')
-    paginator = Paginator(consulta, 10)
 
+    if data == 'hoje':
+        consulta = consulta.filter(data=data_atual.date())
+    elif data == 'proxima_semana':
+        data_futuro = data_atual + timedelta(days=7)
+        consulta = consulta.filter(data__range=[data_atual.date(), data_futuro.date()])
+    elif data == 'proxima_mes':
+        data_futuro = data_atual + timedelta(days=30)
+        consulta = consulta.filter(data__range=[(data_atual + timedelta(days=1)).date(), data_futuro.date()])
+    elif data == 'semana_anterior':
+        data_passado = data_atual - timedelta(days=7)
+        consulta = consulta.filter(data__range=[data_passado.date(), (data_atual - timedelta(days=1)).date()])
+    elif data == 'mes_anterior':
+        data_passado = data_atual - timedelta(days=30)
+        consulta = consulta.filter(data__range=[data_passado.date(), (data_atual - timedelta(days=1)).date()])
+    elif data == 'todas':
+        pass
+
+    if query:
+        consulta = consulta.filter(
+            Q(titulo__icontains=query) |
+            Q(user__last_name__icontains=query) |
+            Q(user__first_name__icontains=query) |
+            Q(laboratorio__name__icontains=query))
+    if status1:
+        consulta = consulta.filter(status=status1)
+
+    paginator = Paginator(consulta, 10)
     page_number = request.GET.get("page")
     agendamentos = paginator.get_page(page_number)
     context = {
@@ -125,8 +189,8 @@ def listar_solicitacao(request):
     }
     return render(request, template_name, context)
 
-@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)"""
 def conf_solicitacao(request, agendamento_id):
     agendamento = Agendamento.objects.get(id=agendamento_id)
     if agendamento.status != 'Agendado':
@@ -156,8 +220,8 @@ def conf_solicitacao(request, agendamento_id):
     return redirect('secretaria:listar_solicitacao')
 
 
-@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)"""
 def negar_solicitacao(request, agendamento_id):
     try:
         agendamento = Agendamento.objects.get(id=agendamento_id)
@@ -185,8 +249,8 @@ def negar_solicitacao(request, agendamento_id):
 
     return redirect('secretaria:listar_solicitacao')
 
-@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)"""
 def excluir_agendamento(request, agendamento_id):
     try:
         agendamento = Agendamento.objects.get(id=agendamento_id)
@@ -199,8 +263,8 @@ def excluir_agendamento(request, agendamento_id):
 
 
 
-@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)"""
 def add_tipo(request):
     template_name = 'tipo_form.html'
     context = {}
@@ -224,13 +288,16 @@ def add_tipo(request):
     return render(request, template_name, context)
 
 
-@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)"""
 def list_tipo(request):
     template_name = 'list_tipo_form.html'
+    query = request.POST.get('query')
     consulta = Tipo.objects.all()
+    if query:
+        consulta = consulta.filter(
+            Q(titulo__icontains=query))
     paginator = Paginator(consulta, 10)
-
     page_number = request.GET.get("page")
     tipos = paginator.get_page(page_number)
     context = {
@@ -238,13 +305,16 @@ def list_tipo(request):
     }
     return render(request, template_name, context)
 
-@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)"""
 def excluir_tipo(request, tipo_id):
     try:
         tipo = Tipo.objects.get(id=tipo_id)
-        tipo.delete()
-        messages.success(request, "Tipo excluído!")
+        if Agendamento.objects.filter(tipo=tipo).exists():
+            messages.error(request, "Este tipo está relacionado a agendamentos e não pode ser excluído.")
+        else:
+            tipo.delete()
+            messages.success(request, "Tipo excluído!")
     except Tipo.DoesNotExist:
         messages.error(request, "Tipo não encontrado.")
 

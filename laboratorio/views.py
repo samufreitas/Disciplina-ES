@@ -1,13 +1,21 @@
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+
+from secretaria.models import Agendamento
 from .models import Laboratorio
 from .forms import LaboratorioForm
 from django.core.paginator import Paginator
+from django.db.models import Q
+
 def list_lab(request):
     template_name = 'laboratorio_list.html'
+    query = request.POST.get('query')
     consulta = Laboratorio.objects.all()
+    if query:
+        consulta = consulta.filter(
+            Q(name__icontains=query))
     paginator = Paginator(consulta, 10)
 
     page_number = request.GET.get("page")
@@ -47,6 +55,15 @@ class LaboratorioUpdateView(UpdateView):
         return insere
 
 
-class LaboratorioDeleteView(DeleteView):
-    model = Laboratorio
-    success_url = reverse_lazy('laboratorio:laboratorio_list')
+def excluir_lab(request, lab_id):
+    try:
+        lab = Laboratorio.objects.get(id=lab_id)
+        if Agendamento.objects.filter(laboratorio=lab).exists():
+            messages.error(request, "Este laboratório está relacionado a agendamentos e não pode ser excluído.")
+        else:
+            lab.delete()
+            messages.success(request, "Tipo excluído!")
+    except Laboratorio.DoesNotExist:
+        messages.error(request, "Tipo não encontrado.")
+
+    return redirect('laboratorio:laboratorio_list')

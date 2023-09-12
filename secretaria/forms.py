@@ -9,15 +9,16 @@ class TipoForm(forms.ModelForm):
         model = Tipo
         fields = ['titulo']
 
-    def clean_titulo(self):
-        titulo = self.cleaned_data['titulo']
+    def clean(self):
+        cleaned_data = super().clean()
+        titulo = cleaned_data.get("titulo")
         if not titulo:
-            raise forms.ValidationError("Campo obrigatório.")
+            raise ValidationError("Campo obrigatório.")
         if Tipo.objects.filter(titulo__iexact=titulo).exists():
-            raise forms.ValidationError('Já existe um tipo com esse mesmo título.')
+            raise ValidationError('Já existe um tipo com esse mesmo título.')
         if re.match(r'^[0-9!@#$%^&*()_+{}\[\]:;<>,.?~\\/\\\'"\\-]*$', titulo):
-            raise forms.ValidationError('O título não pode conter apenas números ou caracteres especiais.')
-        return titulo
+            raise ValidationError('O título não pode conter apenas números ou caracteres especiais.')
+
 
 
 class AgendamentoForm(forms.ModelForm):

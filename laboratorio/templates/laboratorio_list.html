@@ -3,7 +3,6 @@
     <div class="container">
         <h5 class="mt-4">Listagem de laboratórios</h5>
         <table class="table table-striped">
-            {% include 'partials/messages.html' %}
             <thead>
                 <tr>
                     <th scope="col">Nome</th>
@@ -23,7 +22,7 @@
                     <td>{{ lab.qt_teclado }}</td>
                     <td>{{ lab.qt_teclado }}</td>
                     <td>
-                        <form id="DeleteForm{{ lab.id }}" action="{% url 'laboratorio:laboratorio_delete' lab.id %}" method="post">
+                        <form id="DeleteForm{{ lab.id }}" action="{% url 'laboratorio:excluir_lab' lab.id %}" method="post">
                             {% csrf_token %}
                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" onclick="DeleteModal({{ lab.id }})">
                                 Exluir
@@ -34,9 +33,22 @@
                 </tr>
                 {% endfor %}
             </tbody>
-            <div class="text-right">
-                <a href=" {% url 'laboratorio:laboratorio_create'%}" class="btn btn-success btn-sm">Adicionar laboratório</a>
+            <div class="container mt-3">
+            <div class="row my-3">
+                <div class="col-md-8">
+                    <form method="POST" class="form-inline">
+                        {% csrf_token %}
+                        <div class="input-group"> <!-- Use uma classe input-group para agrupar o campo de entrada e o botão -->
+                            <input type="text" name="query" placeholder="Pesquisar por nome" class="form-control mx-2" value="{{ query|default:'' }}">
+                            <button type="submit" class="btn btn-primary">Pesquisar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-4 text-md-right">
+                    <a href="{% url 'laboratorio:laboratorio_create' %}" class="btn btn-success">Adicionar novo laboratório</a>
+                </div>
             </div>
+        </div>
         </table>
         <div class="pagination d-flex justify-content-center align-items-center">
             <span class="step-links">

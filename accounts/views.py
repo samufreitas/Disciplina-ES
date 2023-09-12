@@ -9,6 +9,7 @@ from django.contrib.auth.models import User, Group
 from .forms import UserForm
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.db.models import Q
 
 # Função para verificar se o usuário pertence ao grupo "Secretaria"
 def is_secretaria(user):
@@ -16,8 +17,8 @@ def is_secretaria(user):
 
 
 
-@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)"""
 def add_user(request):
     template_name = 'user_create.html'
     context = {}
@@ -50,13 +51,21 @@ def add_user(request):
     context['form'] = form
     return render(request, template_name, context)
 
-@login_required(login_url='/contas/login/')
-@user_passes_test(is_secretaria)
+"""@login_required(login_url='/contas/login/')
+@user_passes_test(is_secretaria)"""
 def list_user(request):
     template_name = 'user_list.html'
     consulta = User.objects.filter(is_superuser=False)
+    query = request.POST.get('query')
+    groups = request.POST.get('groups')
+    if query:
+        consulta = consulta.filter(
+            Q(last_name__icontains=query) |
+            Q(first_name__icontains=query) |
+            Q(username__icontains=query))
+    if groups:
+        consulta = consulta.filter(groups__name__icontains=groups)
     paginator = Paginator(consulta, 10)
-
     page_number = request.GET.get("page")
     users = paginator.get_page(page_number)
     context = {

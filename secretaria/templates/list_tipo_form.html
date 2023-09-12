@@ -21,12 +21,24 @@
                             </button>
                     </form>
                 </td>
-                <td>{{ tipo.id }}</td>
             </tr>
             {% endfor %}
         </tbody>
-         <div class="text-right">
-            <a href="{% url 'secretaria:add_tipo' %}" class="btn btn-success btn-sm">Adicionar novo tipo</a>
+         <div class="container mt-3">
+            <div class="row my-3">
+                <div class="col-md-8">
+                    <form method="POST" class="form-inline">
+                        {% csrf_token %}
+                        <div class="input-group"> <!-- Use uma classe input-group para agrupar o campo de entrada e o botão -->
+                            <input type="text" name="query" placeholder="Pesquisar por título" class="form-control mx-2" value="{{ query|default:'' }}">
+                            <button type="submit" class="btn btn-primary">Pesquisar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-4 text-md-right">
+                    <a href="{% url 'secretaria:add_tipo' %}" class="btn btn-success">Adicionar novo tipo</a>
+                </div>
+            </div>
         </div>
 
     </table>

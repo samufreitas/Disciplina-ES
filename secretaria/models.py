@@ -26,9 +26,7 @@ class Agendamento(models.Model):
     class Meta:
         verbose_name = 'Agendamento'
         verbose_name_plural = 'Agendamentos'
-        ordering = ['id']
-
-        # Retorna o nome da class Agendamento
+        ordering = ['-data']
 
     def __str__(self):
         return self.titulo

@@ -9,7 +9,7 @@
                     <th scope="col">Sobrenome</th>
                     <th scope="col">Matricula</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Grupo</th>
+                    <th scope="col">Tipo</th>
                     <th scope="col">Ações</th>
                 </tr>
             </thead>
@@ -38,9 +38,30 @@
                 </tr>
                 {% endfor %}
             </tbody>
-            <div class="text-right">
-                <a href=" {% url 'accounts:user_create'%}" class="btn btn-success btn-sm">Adicionar novo usuário</a>
+            <div class="container mt-3">
+            <div class="row my-3">
+                <div class="col-md-8">
+                    <form method="POST" class="form-inline">
+                        {% csrf_token %}
+                        <div class="input-group"> <!-- Use uma classe input-group para agrupar o campo de entrada e o botão -->
+                            <input type="text" name="query" placeholder="Pesquisar por nome, sobrenome e matrícula" class="form-control" value="{{ query|default:'' }}">
+                            <select name="groups" class="form-select mx-2">
+                                <option value="">Filtrar por tipo</option>
+                                <option value="">Todos</option>
+                                <option value="Monitor">Monitor</option>
+                                <option value="Professor">Professor</option>
+                                <option value="Secretaria">Secretaria</option>
+                            </select>
+
+                            <button type="submit" class="btn btn-primary">Pesquisar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-4 text-md-right">
+                    <a href="{% url 'accounts:user_create' %}" class="btn btn-success">Adicionar novo usuário</a>
+                </div>
             </div>
+        </div>
         </table>
         <div class="pagination d-flex justify-content-center align-items-center">
             <span class="step-links">
