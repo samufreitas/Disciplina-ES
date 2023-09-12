@@ -6,6 +6,8 @@ from secretaria.models import Agendamento, Tipo
 from laboratorio.models import Laboratorio
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.utils import timezone
+from datetime import date, timedelta
 def is_professor(user):
     return user.groups.filter(name='Professor').exists()
 
@@ -57,9 +59,40 @@ def agendar_professor(request):
 @user_passes_test(is_professor)
 def listar_professor(request):
     template_name = 'professor/lista_agendamento_professor.html'
-    consulta = Agendamento.objects.filter(user=request.user)
-    paginator = Paginator(consulta, 10)
+    query = request.POST.get('query')
+    status1 = request.POST.get('status1')
+    data = request.POST.get('data')
+    data_atual = timezone.now()
+    consulta = Agendamento.objects.all()#filter(user=request.user)
 
+    #Parte dos filtros
+    if data == 'hoje':
+        consulta = consulta.filter(data=data_atual.date())
+    elif data == 'proxima_semana':
+        data_futuro = data_atual + timedelta(days=7)
+        consulta = consulta.filter(data__range=[data_atual.date(), data_futuro.date()])
+    elif data == 'proxima_mes':
+        data_futuro = data_atual + timedelta(days=30)
+        consulta = consulta.filter(data__range=[(data_atual + timedelta(days=1)).date(), data_futuro.date()])
+    elif data == 'semana_anterior':
+        data_passado = data_atual - timedelta(days=7)
+        consulta = consulta.filter(data__range=[data_passado.date(), (data_atual - timedelta(days=0)).date()])
+    elif data == 'mes_anterior':
+        data_passado = data_atual - timedelta(days=30)
+        consulta = consulta.filter(data__range=[data_passado.date(), (data_atual - timedelta(days=1)).date()])
+    elif data == 'todas':
+        pass
+
+    if query:
+        consulta = consulta.filter(
+            Q(titulo__icontains=query) |
+            Q(tipo__titulo__icontains=query) |
+            Q(laboratorio__name__icontains=query))
+
+    if status1:
+        consulta = consulta.filter(status=status1)
+    #Parte de paginação
+    paginator = Paginator(consulta, 8)
     page_number = request.GET.get("page")
     agendamentos = paginator.get_page(page_number)
     context = {
