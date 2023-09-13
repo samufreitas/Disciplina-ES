@@ -26,7 +26,7 @@ def is_secretaria(user):
 """@login_required(login_url='/contas/login/')
 @user_passes_test(is_secretaria)"""
 def pag_secretaria(request):
-    return render(request, 'secretaria/base_secretaria.html')
+    return render(request, 'calendar/calendar.html')
 
 """@login_required(login_url='/contas/login/')
 @user_passes_test(is_secretaria)"""
@@ -320,15 +320,32 @@ def excluir_tipo(request, tipo_id):
 
     return redirect('secretaria:list_tipo')
 
+def exibir_modal(request, agendamento_id):
+    agendamento = get_object_or_404(Agendamento, pk=agendamento_id)
+    titulo = f"{agendamento.titulo} {agendamento.tipo}"
+    str = agendamento.tipo
+    print(str)
+    data = {
+        'titulo': titulo,
+        'data': agendamento.data.strftime('%d/%m/%Y'),
+        'hora_inicio': agendamento.hora_inicio.strftime('%H:%M'),
+        'hora_fim': agendamento.hora_fim.strftime('%H:%M'),
+
+    }
+    return JsonResponse(data)
+
 
 def eventos(request):
     eventos = Agendamento.objects.all()
     data = []
+
     for evento in eventos:
+
+        titulo_com_tipo = f"({evento.tipo})  {evento.titulo}"
+        data_hora_inicio = evento.data.strftime('%Y-%m-%d') + 'T' + evento.hora_inicio.strftime('%H:%M:%S')
         data.append({
             'id': evento.id,
-            'title': evento.titulo,
+            'title': titulo_com_tipo,
+            'start': data_hora_inicio,  # Converte a data para o formato ISO8601
         })
     return JsonResponse(data, safe=False)
-
-

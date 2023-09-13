@@ -6,6 +6,8 @@ app_name = 'secretaria'
 urlpatterns = [
     path('', views.pag_secretaria, name='pag_secretaria'),
     path('agendar/', views.adicionar_evento, name='agendar'),
+
+    path('exibir_modal/<int:agendamento_id>/', views.exibir_modal, name='exibir_modal'),
     path('eventos/', views.eventos, name='eventos'),
     path('lista/', views.listar_agendamentos, name='lista'),
 

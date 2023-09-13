@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8' />
+        <link href="{% static 'fullcalendar/css/core/main.min.css'%}" rel='stylesheet' />
+        <link href="{% static 'fullcalendar/css/daygrid/main.min.css'%}" rel='stylesheet' />
+        <link href="{% static 'fullcalendar/css/personalizado.css'%}" rel='stylesheet' />
+
+       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" >
+        <script src="{% static 'fullcalendar/js/core/main.min.js'%}"></script>
+        <script src="{% static 'fullcalendar/js/interaction/main.min.js'%}"></script>
+        <script src="{% static 'fullcalendar/js/daygrid/main.min.js' %}"></script>
+        <script src="{% static 'fullcalendar/js/core/locales/pt-br.js' %}"></script>
+         <script src="{% static 'fullcalendar/js/personalizado.js' %}"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" ></script>
+
+    </head>
+    <body>
+
+        <div id='calendar' class="container-fluid text-center col-sm-6"></div>
+        <!-- Modal -->
+        <div class="modal fade" id="visualizar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detalhes do agendamento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <dl class="row">
+                  <dt class="col-sm-4">Descrição do agendamento:</dt>
+                  <dd class="col-sm-8" id="title"></dd>
+
+                  <dt class="col-sm-4">Tipo do agendamento:</dt>
+                  <dd class="col-sm-8" id="description"></dd>
+
+                  <dt class="col-sm-4">Hora de início:</dt>
+                  <dd class="col-sm-8" id="start"></dd>
+
+                  <dt class="col-sm-4">Hora de fim:</dt>
+                  <dd class="col-sm-8" id="end"></dd>
+                </dl>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </body>
+</html>
+
